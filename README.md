@@ -58,7 +58,7 @@ Entre sus responsabilidades se incluyen:
 | 7 | | Historial de Mundiales | El Mundial |
 | 8 | | Eventos en Vivo | La Final |
 | 9 | Galarza Alejandro | Estado del Equipo en la Final | La Final |
-| 10 | | **Jugar la Final** *(Responsabilidad Grupal)* | La Final |
+| 10 | Arguello Mateo| **Jugar la Final** *(Responsabilidad Grupal)* | La Final |
 
 > **Jugar la Final** es obligatoria para la aprobación del TP y responsabilidad de todo el grupo. Debe poder jugarse de principio a fin sin errores. De ella dependen: Eventos en Vivo, Estado del Equipo, Estadísticas y Premios e Historial de Mundiales.
 
