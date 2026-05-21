@@ -52,7 +52,7 @@ Entre sus responsabilidades se incluyen:
 | 1 | | Cuerpo Técnico y Estrategia | Mi Equipo |
 | 2 | | Rivales Históricos | Mi Equipo |
 | 3 | | Fase de Grupos | El Mundial |
-| 4 | | Camino del Equipo | El Mundial |
+| 4 | Gabriel Alvarez | Camino del Equipo | El Mundial |
 | 5 | | Detalles de Partidos | El Mundial |
 | 6 | | Estadísticas y Premios | El Mundial |
 | 7 | | Historial de Mundiales | El Mundial |
