@@ -49,7 +49,7 @@ Entre sus responsabilidades se incluyen:
 
 | # | Integrante | Funcionalidad | Sección |
 |---|-----------|---------------|---------|
-| 1 | | Cuerpo Técnico y Estrategia | Mi Equipo |
+| 1 | Oziel Gonzalez | Cuerpo Técnico y Estrategia | Mi Equipo |
 | 2 | | Rivales Históricos | Mi Equipo |
 | 3 | | Fase de Grupos | El Mundial |
 | 4 | Gabriel Alvarez | Camino del Equipo | El Mundial |
