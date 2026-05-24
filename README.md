@@ -51,7 +51,7 @@ Entre sus responsabilidades se incluyen:
 |---|-----------|---------------|---------|
 | 1 | Oziel Gonzalez | Cuerpo Técnico y Estrategia | Mi Equipo |
 | 2 | | Rivales Históricos | Mi Equipo |
-| 3 | | Fase de Grupos | El Mundial |
+| 3 | kiara rodriguez| Fase de Grupos | El Mundial |
 | 4 | Gabriel Alvarez | Camino del Equipo | El Mundial |
 | 5 | Gonzalo Diaz | Detalles de Partidos | El Mundial |
 | 6 | | Estadísticas y Premios | El Mundial |
