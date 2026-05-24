@@ -56,7 +56,7 @@ Entre sus responsabilidades se incluyen:
 | 5 | Gonzalo Diaz | Detalles de Partidos | El Mundial |
 | 6 | | Estadísticas y Premios | El Mundial |
 | 7 | | Historial de Mundiales | El Mundial |
-| 8 | | Eventos en Vivo | La Final |
+| 8 | Olivar Jazmín | Eventos en Vivo | La Final |
 | 9 | Galarza Alejandro | Estado del Equipo en la Final | La Final |
 | 10 | Arguello Mateo | **Jugar la Final** *(Responsabilidad Grupal)* | La Final |
 
