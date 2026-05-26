@@ -1,4 +1,5 @@
 # Trabajo Práctico Integrador — Programación III UTN
+
 ## Mundial 2026 — Full Stack Web App
 
 ---
@@ -13,13 +14,14 @@ La aplicación consume datos de la **WorldCupAPI** — una API ya desarrollada p
 
 ## Stack técnico
 
-| Capa | Tecnología | Puerto | URL base |
-|------|-----------|--------|----------|
-| Frontend | Angular (WorldCupApp) | `:3101` | `http://localhost:3101` |
-| Backend BFF | NestJS (WorldCupCore) | `:4101` | `http://localhost:4101/worldCupCore` |
-| API de datos | WorldCupAPI (solo lectura, cátedra) | `:5101` | `http://localhost:5101/worldCup` |
+| Capa         | Tecnología                          | Puerto  | URL base                             |
+| ------------ | ----------------------------------- | ------- | ------------------------------------ |
+| Frontend     | Angular (WorldCupApp)               | `:3101` | `http://localhost:3101`              |
+| Backend BFF  | NestJS (WorldCupCore)               | `:4101` | `http://localhost:4101/worldCupCore` |
+| API de datos | WorldCupAPI (solo lectura, cátedra) | `:5101` | `http://localhost:5101/worldCup`     |
 
 **Swagger:**
+
 - WorldCupAPI: `http://localhost:5101/worldCup/api`
 - WorldCupCore: `http://localhost:4101/worldCupCore/api`
 
@@ -41,24 +43,24 @@ Entre sus responsabilidades se incluyen:
 - Centralizar consultas técnicas y comunicación con la cátedra.
 - Ayudar a destrabar problemas técnicos dentro del equipo.
 
-**Nombre del Tech Lead:**  [Completar con Nombre]
+**Nombre del Tech Lead:** [Completar con Nombre]
 
 ### Integrantes por funcionalidad
 
 > Completar con los nombres reales y la funcionalidad que va a realizar cada integrante.
 
-| # | Integrante | Funcionalidad | Sección |
-|---|-----------|---------------|---------|
-| 1 | Oziel Gonzalez | Cuerpo Técnico y Estrategia | Mi Equipo |
-| 2 | Lidia Viviana Zapiola | Rivales Históricos | Mi Equipo |
-| 3 | kiara rodriguez| Fase de Grupos | El Mundial |
-| 4 | Gabriel Alvarez | Camino del Equipo | El Mundial |
-| 5 | Gonzalo Diaz | Detalles de Partidos | El Mundial |
-| 6 | | Estadísticas y Premios | El Mundial |
-| 7 | | Historial de Mundiales | El Mundial |
-| 8 | Olivar Jazmín | Eventos en Vivo | La Final |
-| 9 | Galarza Alejandro | Estado del Equipo en la Final | La Final |
-| 10 | Arguello Mateo | **Jugar la Final** *(Responsabilidad Grupal)* | La Final |
+| #   | Integrante                | Funcionalidad                                 | Sección    |
+| --- | ------------------------- | --------------------------------------------- | ---------- |
+| 1   | Oziel Gonzalez            | Cuerpo Técnico y Estrategia                   | Mi Equipo  |
+| 2   | Lidia Viviana Zapiola     | Rivales Históricos                            | Mi Equipo  |
+| 3   | kiara rodriguez           | Fase de Grupos                                | El Mundial |
+| 4   | Gabriel Alvarez           | Camino del Equipo                             | El Mundial |
+| 5   | Gonzalo Diaz              | Detalles de Partidos                          | El Mundial |
+| 6   |                           | Estadísticas y Premios                        | El Mundial |
+| 7   | Cristian Demian Larrousse | Historial de Mundiales                        | El Mundial |
+| 8   | Olivar Jazmín             | Eventos en Vivo                               | La Final   |
+| 9   | Galarza Alejandro         | Estado del Equipo en la Final                 | La Final   |
+| 10  | Arguello Mateo            | **Jugar la Final** _(Responsabilidad Grupal)_ | La Final   |
 
 > **Jugar la Final** es obligatoria para la aprobación del TP y responsabilidad de todo el grupo. Debe poder jugarse de principio a fin sin errores. De ella dependen: Eventos en Vivo, Estado del Equipo, Estadísticas y Premios e Historial de Mundiales.
 
@@ -66,10 +68,10 @@ Entre sus responsabilidades se incluyen:
 
 ## Documentación
 
-| Documento | Descripción |
-|-----------|-------------|
-| [Enunciado v5](./docs/TP_Mundial2026_Enunciado_v5_Simplificado.pdf) | Descripción completa del TP: funcionalidades a desarrollar, requerimientos de pantalla por feature, endpoints de WorldCupAPI a consumir y criterios de evaluación. |
-| [Guía Técnica v5](./docs/TP_Mundial2026_Guía_Técnica_v5.pdf) | Arquitectura del proyecto, listado completo de endpoints disponibles de la WorldCupAPI, notas de implementación y diagramas de flujo de la feature Plantel como referencia. |
+| Documento                                                           | Descripción                                                                                                                                                                 |
+| ------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [Enunciado v5](./docs/TP_Mundial2026_Enunciado_v5_Simplificado.pdf) | Descripción completa del TP: funcionalidades a desarrollar, requerimientos de pantalla por feature, endpoints de WorldCupAPI a consumir y criterios de evaluación.          |
+| [Guía Técnica v5](./docs/TP_Mundial2026_Guía_Técnica_v5.pdf)        | Arquitectura del proyecto, listado completo de endpoints disponibles de la WorldCupAPI, notas de implementación y diagramas de flujo de la feature Plantel como referencia. |
 
 ---
 
@@ -201,7 +203,6 @@ world-cup-core/              ← BFF NestJS (puerto 4101, base /worldCupCore)
 
 > Cada feature sigue el mismo patrón que los ejemplos provistos: `model/` → `service/` → `component` en el frontend; `controller` → `service` en el backend. Estudiar los ejemplos antes de arrancar.
 
-
 ---
 
 ## Entregables
@@ -215,4 +216,4 @@ world-cup-core/              ← BFF NestJS (puerto 4101, base /worldCupCore)
 
 ---
 
-*Programación III — UTN — 2026*
+_Programación III — UTN — 2026_
