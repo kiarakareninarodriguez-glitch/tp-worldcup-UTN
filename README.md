@@ -54,7 +54,7 @@ Entre sus responsabilidades se incluyen:
 | 3 | kiara rodriguez| Fase de Grupos | El Mundial |
 | 4 | Gabriel Alvarez | Camino del Equipo | El Mundial |
 | 5 | Gonzalo Diaz | Detalles de Partidos | El Mundial |
-| 6 | | Estadísticas y Premios | El Mundial |
+| 6 | Alejo Campo| Estadísticas y Premios | El Mundial |
 | 7 | Cristian Demian Larrousse | Historial de Mundiales | El Mundial |
 | 8 | Olivar Jazmín | Eventos en Vivo | La Final |
 | 9 | Galarza Alejandro | Estado del Equipo en la Final | La Final |
