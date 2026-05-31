@@ -1,15 +1,15 @@
 import { Controller, Get, Query } from '@nestjs/common';
 import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { AbstractController } from 'src/basic/abstract.controller';
+import { TeamStateService } from '../services/team-state.service';
 import { TeamStateQueryRequest } from './request/team-state-query.request';
-import { TeamStateApiResponse } from '../services/model/view/team-state-api.interface';
 
 @ApiTags('final-match')
 @Controller('final-match')
 export class TeamStateController extends AbstractController {
   // TODO: Se debe implementar el controlador y el servicio correspondiente.
 
-    constructor() {
+    constructor(private readonly teamStateService: TeamStateService) {
       super();
     }
 
@@ -19,6 +19,6 @@ export class TeamStateController extends AbstractController {
       @ApiQuery({ name: 'lang', required: false, enum: ['es', 'en'] })
       public async getTeamState(@Query() request: TeamStateQueryRequest): Promise<unknown> {
 
-        return this.createOkResponse({} as TeamStateApiResponse);
+        return this.createOkResponse(await this.teamStateService.getTeamState(request.lang));
       }
 }
