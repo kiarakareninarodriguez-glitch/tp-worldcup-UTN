@@ -14,7 +14,7 @@ export class TeamStateController extends AbstractController {
     }
 
       /** Returns title team state. */
-      @Get('/final-match/team-state')
+      @Get('/team-state')
       @ApiOperation({ summary: 'final-match - Team status component' })
       @ApiQuery({ name: 'lang', required: false, enum: ['es', 'en'] })
       public async getTeamState(@Query() request: TeamStateQueryRequest): Promise<unknown> {
