@@ -50,15 +50,15 @@ Entre sus responsabilidades se incluyen:
 | # | Integrante | Funcionalidad | Sección |
 |---|-----------|---------------|---------|
 | 1 | Oziel Gonzalez | Cuerpo Técnico y Estrategia | Mi Equipo |
-| 2 | | Rivales Históricos | Mi Equipo |
-| 3 | | Fase de Grupos | El Mundial |
+| 2 | Lidia Viviana Zapiola | Rivales Históricos | Mi Equipo |
+| 3 | kiara rodriguez| Fase de Grupos | El Mundial |
 | 4 | Gabriel Alvarez | Camino del Equipo | El Mundial |
 | 5 | Gonzalo Diaz | Detalles de Partidos | El Mundial |
-| 6 | | Estadísticas y Premios | El Mundial |
-| 7 | | Historial de Mundiales | El Mundial |
-| 8 | | Eventos en Vivo | La Final |
+| 6 | Alejo Campo| Estadísticas y Premios | El Mundial |
+| 7 | Cristian Demian Larrousse | Historial de Mundiales | El Mundial |
+| 8 | Olivar Jazmín | Eventos en Vivo | La Final |
 | 9 | Galarza Alejandro | Estado del Equipo en la Final | La Final |
-| 10 | Arguello Mateo | **Jugar la Final** *(Responsabilidad Grupal)* | La Final |
+| 10 || **Jugar la Final** *(Responsabilidad Grupal)* | La Final |
 
 > **Jugar la Final** es obligatoria para la aprobación del TP y responsabilidad de todo el grupo. Debe poder jugarse de principio a fin sin errores. De ella dependen: Eventos en Vivo, Estado del Equipo, Estadísticas y Premios e Historial de Mundiales.
 
