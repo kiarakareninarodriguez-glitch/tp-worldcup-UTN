@@ -71,6 +71,14 @@ export class TeamStateService  extends BaseApiService {
             this.pageState.errorMessage = '';
             return of(undefined);
           }
+          if(this.isMatchNotFound(error)){
+            this.pageState.data = null;
+            this.pageState.showNoFinalState = true;
+            this.pageState.errorMessage = 'No hay final creada';
+            return of(undefined);
+
+          }
+          
   
           this.pageState.data = null;
           this.pageState.showNoFinalState = true;
@@ -106,5 +114,11 @@ export class TeamStateService  extends BaseApiService {
         ?.responseMessage?.messageCode;
 
         return messageCode === 'WC_TEAM_STATE_UNAVAILABLE';
+    }
+    private isMatchNotFound(error: HttpErrorResponse): boolean {
+        const messageCode = (error?.error as { responseMessage?: { messageCode?: string } } | undefined)
+        ?.responseMessage?.messageCode;
+
+        return messageCode === 'WC_TEAM_STATE_NOT_FOUND';
     }
 }
