@@ -1,6 +1,96 @@
-<section class="card">
-  <div class="card-header">
-    <span class="card-title">Camino del equipo</span>
-  </div>
-  <p>Este componente debe ser desarrollado por el alumno.</p>
-</section>
+<div class="empty-state" *ngIf="pageState.loading">
+  <div class="empty-icon">⏳</div>
+  <p>Cargando camino del equipo...</p>
+</div>
+
+<div class="empty-state" *ngIf="!pageState.loading && pageState.errorMessage">
+  <div class="empty-icon">⚠️</div>
+  <p>{{ pageState.errorMessage }}</p>
+</div>
+
+<div class="empty-state" *ngIf="!pageState.loading && !pageState.errorMessage && pageState.showNoSimulationState">
+  <div class="empty-icon">🏟️</div>
+  <p>Todavía no hay un mundial simulado. Primero simulá el mundial desde la sección <strong>Simular Final</strong>.</p>
+</div>
+
+<ng-container *ngIf="!pageState.loading && !pageState.errorMessage && !pageState.showNoSimulationState && pageState.journey as journey">
+
+  <section class="card">
+    <div class="card-header">
+      <span class="card-title">Camino del Equipo</span>
+      <span class="badge badge-primary">{{ journey.teamName }}</span>
+    </div>
+
+    <div class="journey-banner mt-16">
+      <div class="banner-stage">
+        <span class="stage-icon" *ngIf="journey.isChampion">🏆</span>
+        <span class="stage-icon" *ngIf="!journey.isChampion">⚽</span>
+        <div>
+          <p class="stage-label">Etapa alcanzada</p>
+          <p class="stage-value">{{ journey.stageReachedLabel }}</p>
+        </div>
+      </div>
+
+      <div class="banner-stats">
+        <div class="stat-box">
+          <span class="stat-value">{{ journey.matchesPlayed }}</span>
+          <span class="stat-label">Partidos jugados</span>
+        </div>
+        <div class="stat-box champion-box" *ngIf="journey.isChampion">
+          <span class="stat-value">⭐</span>
+          <span class="stat-label">¡Campeón!</span>
+        </div>
+        <div class="stat-box" *ngIf="!journey.isChampion && journey.eliminatedByTeamName">
+          <span class="stat-value eliminated-label">Eliminado por</span>
+          <span class="stat-label">{{ journey.eliminatedByTeamName }}</span>
+        </div>
+      </div>
+    </div>
+
+    <p class="journey-summary mt-16" *ngIf="journey.summary">{{ journey.summary }}</p>
+  </section>
+
+  <section class="card mt-16" *ngIf="journey.matches && journey.matches.length > 0">
+    <div class="card-header">
+      <span class="card-title">Partidos</span>
+    </div>
+
+    <ol class="timeline mt-16">
+      <li
+        *ngFor="let match of journey.matches"
+        class="timeline-item"
+        [ngClass]="getResultClass(match.resultStyle)">
+
+        <div class="timeline-stage">
+          <span class="stage-badge">{{ match.stageLabel }}</span>
+        </div>
+
+        <div class="timeline-content">
+          <div class="match-row">
+            <div class="opponent">
+              <span class="opponent-flag">{{ match.opponentFlag }}</span>
+              <span class="opponent-name">{{ match.opponentTeamName }}</span>
+            </div>
+
+            <div class="score-block" [class.pending]="match.isPending">
+              <span class="score-label" *ngIf="!match.isPending">{{ match.scoreLabel }}</span>
+              <span class="score-label pending-text" *ngIf="match.isPending">Pendiente</span>
+            </div>
+
+            <div class="result-block" *ngIf="!match.isPending">
+              <span class="result-badge" [ngClass]="getResultBadgeClass(match.resultStyle)">
+                {{ match.resultLabel }}
+              </span>
+            </div>
+          </div>
+
+          <div class="match-meta">
+            <span *ngIf="match.resolutionLabel" class="resolution-label">{{ match.resolutionLabel }}</span>
+          </div>
+        </div>
+
+      </li>
+    </ol>
+  </section>
+
+</ng-container>

@@ -5,6 +5,7 @@ import { LanguageEnum } from './model/language.enum';
 import { WorldCupApiService } from './world-cup-api.service';
 import type { GameDictionaryApiResponse, SquadPlayerApiItem } from '../teams/services/model/squad-service.interface';
 import type { TeamHistoryApiResponse } from '../teams/services/model/team-history-service.interface';
+import type { JourneyApiRawResponse } from '../world-cup/services/model/journey-service.interface';
 import type {
   CurrentWorldCupApiResponse,
   TeamCatalogApiItem,
@@ -77,4 +78,10 @@ export class WorldCupFeatureApiService extends AbstractBaseService {
       lang: this.resolveLang(lang),
     });
   }
+  public async getTeamJourney(teamId: string, lang?: string): Promise<JourneyApiRawResponse> {
+  return this.getEndpointData<JourneyApiRawResponse>(
+    `/world-cup/current/teams/${teamId}/journey`,
+    { lang: this.resolveLang(lang) },
+  );
+}
 }
