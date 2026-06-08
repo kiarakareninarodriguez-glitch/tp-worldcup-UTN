@@ -53,7 +53,7 @@ export class AppComponent implements OnInit {
     'route.final.live.title': 'Eventos en vivo',
     'route.final.live.subtitle': 'Pendiente de desarrollo por el alumno',
     'route.final.teamState.title': 'Estado del equipo',
-    'route.final.teamState.subtitle': 'Pendiente de desarrollo por el alumno',
+    'route.final.teamState.subtitle': 'Estado de los equipos en la final',
     'route.final.chat.title': 'Jugar la final',
     'route.final.chat.subtitle': 'Pendiente de desarrollo por el alumno',
     'route.fallback.title': 'World Cup 2026',
