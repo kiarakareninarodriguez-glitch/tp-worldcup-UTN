@@ -137,4 +137,6 @@ export class WorldCupFeatureApiService extends AbstractBaseService {
       input,
       messageTypeId,
       lang: this.resolveLang(lang),
+    });
+  }
 }
