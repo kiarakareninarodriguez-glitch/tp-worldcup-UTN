@@ -84,4 +84,21 @@ export class WorldCupFeatureApiService extends AbstractBaseService {
     { lang: this.resolveLang(lang) },
   );
 }
+  public async getWorldCupHistory(): Promise<string[]> {
+    return this.getEndpointData<string[]>('/world-cup/history');
+  }
+
+  public async getWorldCupById(id: string): Promise <WorldCupByIdApiResponse>{
+    return this.getEndpointData<WorldCupByIdApiResponse>(`/world-cup/${id}`,{})
+  }
+
+  public async getWorldCupStatsById(id: string): Promise <WorldCupStatsByIdApiResponse>{
+    return this.getEndpointData<WorldCupStatsByIdApiResponse>(`/world-cup/${id}/stats`,{})
+  }
+
+  public async getWorldCupAwardsById(id: string, lang?: string): Promise <WorldCupAwardsByIdApiResponse>{
+    return this.getEndpointData<WorldCupAwardsByIdApiResponse>(`/world-cup/${id}/awards`,{
+      lang: this.resolveLang(lang),
+    })
+  }
 }
