@@ -6,4 +6,6 @@ import { Component } from '@angular/core';
   templateUrl: './live-events.component.html',
   styleUrls: ['./live-events.component.css'],
 })
-export class LiveEventsPageComponent {}
+export class LiveEventsPageComponent {
+  
+}
