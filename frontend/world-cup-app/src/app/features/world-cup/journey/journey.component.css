@@ -1,21 +1,193 @@
-.jd-loss {
-  border-color: #f44336 !important;
-  background: rgba(244, 67, 54, 0.2) !important;
-  color: #f44336 !important;
+.journey-banner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: flex-start;
 }
 
-.jd-draw {
-  border-color: #ffb300 !important;
-  background: rgba(255, 179, 0, 0.2) !important;
-  color: #ffb300 !important;
+.banner-stage {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
 }
 
-.j-loss {
-  background: rgba(244, 67, 54, 0.15);
-  color: #f44336;
+.stage-icon {
+  font-size: 36px;
+  line-height: 1;
 }
 
-.j-draw {
-  background: rgba(255, 179, 0, 0.2);
-  color: #ffb300;
+.stage-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin: 0;
 }
+
+.stage-value {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--team-primary);
+  margin: 0;
+}
+
+.banner-stats {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.stat-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 16px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  min-width: 80px;
+}
+
+.stat-value {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.stat-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.champion-box {
+  border-color: var(--team-primary);
+  background: color-mix(in srgb, var(--team-primary) 8%, transparent);
+}
+
+.eliminated-label {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+.journey-summary {
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.6;
+  border-left: 3px solid var(--team-primary);
+  padding-left: 12px;
+}
+
+.timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.timeline-item {
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 12px 16px;
+  transition: border-color 0.15s;
+}
+
+.timeline-item.j-win {
+  border-left: 4px solid #22c55e;
+}
+
+.timeline-item.j-loss {
+  border-left: 4px solid #ef4444;
+}
+
+.timeline-item.j-draw {
+  border-left: 4px solid #f59e0b;
+}
+
+.timeline-item.j-pending {
+  border-left: 4px solid var(--border-color);
+  opacity: 0.7;
+}
+
+.timeline-stage {
+  margin-bottom: 8px;
+}
+
+.stage-badge {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.match-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.opponent {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+  min-width: 140px;
+}
+
+.opponent-flag {
+  font-size: 20px;
+}
+
+.opponent-name {
+  font-weight: 500;
+  font-size: 15px;
+}
+
+.score-block {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+  min-width: 60px;
+  text-align: center;
+}
+
+.pending-text {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+.result-badge {
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.badge-win {
+  background: rgba(34, 197, 94, 0.15);
+  color: #22c55e;
+}
+
+.badge-loss {
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+}
+
+.badge-draw {
+  background: rgba(245, 158, 11, 0.15);
+  color: #f59e0b;
+}
+
+.match-meta {
+  margin-top: 4px;
+}
+
+.resolution-label {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
