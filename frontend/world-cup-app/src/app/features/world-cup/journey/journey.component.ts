@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { JourneyViewModel } from './model/journey-view-model.interface';
 import { JourneyService } from './service/journey.service';
+import { UiVisualsService } from 'src/app/core/services/ui-visuals.service';
 
 @Component({
   selector: 'app-journey-page',
@@ -8,9 +9,15 @@ import { JourneyService } from './service/journey.service';
   templateUrl: './journey.component.html',
   styleUrls: ['./journey.component.css'],
 })
-export class JourneyPageComponent implements OnInit {
-  constructor(private readonly journeyService: JourneyService) {}
 
+export class JourneyPageComponent implements OnInit {
+  constructor(
+  private readonly journeyService: JourneyService,
+  private readonly uiVisualsService: UiVisualsService,
+) {}
+getFlag(teamId: string): string {
+  return this.uiVisualsService.getTeamFlag(teamId);
+}
   get pageState(): JourneyViewModel {
     return this.journeyService.getViewModel();
   }
