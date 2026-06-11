@@ -1,6 +1,101 @@
-<section class="card">
-  <div class="card-header">
-    <span class="card-title">Estado del equipo</span>
+<ng-container *ngIf="pageState as pageState">
+
+  <div class="empty-state" *ngIf="pageState.loading">
+    <div class="empty-icon">⏳</div>
+    <p>Cargando datos de estado de equipo en final...</p>
   </div>
-  <p>Este componente debe ser desarrollado por el alumno.</p>
-</section>
+
+  <div class="empty-state" *ngIf="!pageState.loading && pageState.errorMessage">
+    <div class="empty-icon">⚠️</div>
+    <p>{{ pageState.errorMessage }}</p>
+  </div>
+
+  <div class="empty-state mt-16" *ngIf="!pageState.loading && !pageState.errorMessage && pageState.showNoFinalState">
+    <div class="empty-icon">🏟️</div>
+    <p>Todavía no hay una final simulada disponible. Ejecutá una simulación para generar finalistas.</p>
+
+  </div>
+
+  <ng-container
+    *ngIf="!pageState.loading && !pageState.errorMessage && !pageState.showNoFinalState  && pageState.data as data">
+    {{data?.team?.name}} vs {{data?.opponent?.name}}
+    <div class="team-state-actions-row">
+      <div class="team-state-status-row">
+        <span class="badge badge-gray">turno {{data.turn}}</span>
+        <span class="badge badge-green">minuto {{data.minute}}</span>
+        <span class="badge badge-green">marcador {{data.score}}</span>
+      </div>
+
+
+      <form class="team-state-actions-controls" (submit)="$event.preventDefault()">
+        <label class="visually-hidden-label" for="team-state-reteam-state-button">Re-simular Mundial</label>
+        <button id="team-state-reteam-state-button" type="button" class="btn btn-ghost">
+          <span>refrescar</span>
+        </button>
+      </form>
+    </div>
+
+    <div class="vs-container">
+
+      <article class="team-card" style="max-width: 45%;">
+
+
+        <ul>
+          <li> {{data?.team?.flag}} </li>
+          <li>nombre : {{data?.team?.name}}</li>
+          <li>formacion : {{data?.team?.formation}}</li>
+          <li>entrenador : {{data?.team?.coachName}}</li>
+          <li>perfil : {{data?.team?.coachProfile}}</li>
+          <li>tacticas [ ataque: {{data?.team?.tactical?.attack}} ] [ defensa: {{data?.team?.tactical?.defense}} ] [
+            mediocampo: {{data?.team?.tactical?.midfield}} ]</li>
+          <li>jugadores en cancha</li>
+          <li></li>
+        </ul>
+        <ul *ngIf="pageState.data.team.onField.length > 0">EN CANCHA
+          <li class="card" *ngFor="let player of pageState.data.team.onField" title="{{player.name}}">
+            {{player.displayName}} - camiseta {{player.shirtNumber}} - posicion: {{player.position}}- energia:
+            {{player.energy}}</li>
+          <li></li>
+
+        </ul>
+        sustituciones disponibles {{data?.team?.remainingSubstitutions}} : USADAS :{{data?.team?.substitutionsUsed}}
+        <ul  *ngIf="pageState.data.team.onField.length > 0">EN BANCA
+          <li  class="card" *ngFor="let player of pageState.data.team.bench" title="{{player.name}}">
+            {{player.displayName}} - camiseta {{player.shirtNumber}} - posicion: {{player.position}}- energia:
+            {{player.energy}}</li>
+        </ul>
+      </article>
+      <div class="vs-divider">VS</div>
+
+      <article class="team-card" style="max-width: 45%;">
+
+
+        <ul>
+          <li> {{data?.opponent?.flag}} </li>
+          <li>nombre : {{data?.opponent?.name}}</li>
+          <li>formacion : {{data?.opponent?.formation}}</li>
+          <li>entrenador : {{data?.opponent?.coachName}}</li>
+          <li>perfil : {{data?.opponent?.coachProfile}}</li>
+          <li>tacticas [ ataque: {{data?.opponent?.tactical?.attack}} ] [ defensa: {{data?.opponent?.tactical?.defense}} ] [
+            mediocampo: {{data?.opponent?.tactical?.midfield}} ]</li>
+          <li>jugadores en cancha</li>
+          <li></li>
+        </ul>
+        <ul *ngIf="pageState.data.opponent.onField.length > 0">EN CANCHA
+          <li class="card" *ngFor="let player of pageState.data.opponent.onField" title="{{player.name}}">
+            {{player.displayName}} - camiseta {{player.shirtNumber}} - posicion: {{player.position}}- energia:
+            {{player.energy}}</li>
+          <li></li>
+
+        </ul>
+        sustituciones disponibles {{data?.opponent?.remainingSubstitutions}} : USADAS :{{data?.opponent?.substitutionsUsed}}
+        <ul *ngIf="pageState.data.opponent.onField.length > 0">EN BANCA
+          <li class="card" *ngFor="let player of pageState.data.opponent.bench" title="{{player.name}}">
+            {{player.displayName}} - camiseta {{player.shirtNumber}} - posicion: {{player.position}}- energia:
+            {{player.energy}}
+          </li>
+        </ul>
+      </article>
+    </div>
+  </ng-container>
+</ng-container>
