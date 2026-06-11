@@ -5,13 +5,11 @@ import { LanguageEnum } from './model/language.enum';
 import { WorldCupApiService } from './world-cup-api.service';
 import type { GameDictionaryApiResponse, SquadPlayerApiItem } from '../teams/services/model/squad-service.interface';
 import type { TeamHistoryApiResponse } from '../teams/services/model/team-history-service.interface';
-import type { JourneyApiRawResponse } from '../world-cup/services/model/journey-service.interface';
 import type {
   CurrentWorldCupApiResponse,
   TeamCatalogApiItem,
   TeamStatsApiResponse,
 } from '../world-cup/services/model/simulation-service.interface';
-import { MatchSquadResponse } from 'src/match/services/model/api/match-squad-response.model';
 
 @Injectable()
 export class WorldCupFeatureApiService extends AbstractBaseService {
@@ -47,7 +45,9 @@ export class WorldCupFeatureApiService extends AbstractBaseService {
       lang: this.resolveLang(lang),
     });
   }
-
+  public async getTeamRivals(teamId: string): Promise<TeamCatalogApiItem[]> {
+    return this.getEndpointData<TeamCatalogApiItem[]>(`/teams/${teamId}/rivals`);
+  }
   public async listTeams(teamId?: string, name?: string): Promise<TeamCatalogApiItem[]> {
     return this.getEndpointData<TeamCatalogApiItem[]>('/teams', {
       teamId: teamId?.trim().toLowerCase(),
@@ -66,11 +66,6 @@ export class WorldCupFeatureApiService extends AbstractBaseService {
       lang: this.resolveLang(lang),
     });
   }
-    public async getMatchCurrentSquad(lang?: string): Promise<MatchSquadResponse> {
-    return this.getEndpointData<MatchSquadResponse>('/match/current/squad', {
-      lang: this.resolveLang(lang),
-    });
-  }
 
   public async simulateWorldCup(teamId: string, lang?: string): Promise<CurrentWorldCupApiResponse> {
     return this.postEndpointData<CurrentWorldCupApiResponse>('/world-cup/simulate', {
@@ -78,10 +73,4 @@ export class WorldCupFeatureApiService extends AbstractBaseService {
       lang: this.resolveLang(lang),
     });
   }
-  public async getTeamJourney(teamId: string, lang?: string): Promise<JourneyApiRawResponse> {
-  return this.getEndpointData<JourneyApiRawResponse>(
-    `/world-cup/current/teams/${teamId}/journey`,
-    { lang: this.resolveLang(lang) },
-  );
-}
 }

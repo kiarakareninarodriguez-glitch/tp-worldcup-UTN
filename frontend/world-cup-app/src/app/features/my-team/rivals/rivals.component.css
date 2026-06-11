@@ -1,0 +1,76 @@
+.rivals-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.rivals-header h1 {
+  margin: 0;
+}
+
+.summary {
+  font-weight: 600;
+}
+
+.state-card {
+  padding: 1rem;
+  border-radius: 12px;
+  border: 1px solid #2d3557;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.error {
+  border-color: #c1121f;
+}
+
+.rivals-grid {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+}
+
+.rival-card {
+  height: 100%;
+  padding: 1rem;
+  border-radius: 12px;
+  border: 1px solid #2d3557;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.rival-card-header {
+  margin-bottom: 1rem;
+}
+
+.rival-card-header h2 {
+  margin: 0.25rem 0 0;
+  font-size: 1.1rem;
+}
+
+.rival-code {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  opacity: 0.7;
+}
+
+.rival-details {
+  margin: 0;
+}
+
+.rival-details div {
+  margin-bottom: 0.75rem;
+}
+
+.rival-details dt {
+  font-size: 0.8rem;
+  opacity: 0.7;
+}
+
+.rival-details dd {
+  margin: 0.15rem 0 0;
+  font-weight: 600;
+}
