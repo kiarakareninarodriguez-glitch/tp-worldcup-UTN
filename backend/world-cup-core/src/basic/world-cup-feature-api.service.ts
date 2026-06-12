@@ -13,6 +13,11 @@ import type {
 
 @Injectable()
 export class WorldCupFeatureApiService extends AbstractBaseService {
+  public async getGroups(lang?: string): Promise<any> {
+  return this.getEndpointData<any>('/world-cup/current/groups', {
+    lang: this.resolveLang(lang),
+  });
+}
   constructor(
     worldCupApiService: WorldCupApiService,
     adminService: AdminService,

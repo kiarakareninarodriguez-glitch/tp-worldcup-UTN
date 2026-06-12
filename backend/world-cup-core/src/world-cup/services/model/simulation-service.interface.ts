@@ -57,3 +57,58 @@ export interface SimulationScreenResponse {
   finalHomeTeam: FinalistPreview;
   finalAwayTeam: FinalistPreview;
 }
+
+export interface GroupTeamApiItem {
+  teamId: string;
+  teamName: string;
+  confederation: string;
+  played: number;
+  wins: number;
+  draws: number;
+  losses: number;
+  goalsFor: number;
+  goalsAgainst: number;
+  goalDifference: number;
+  points: number;
+  position: number;
+  isQualified: boolean;
+  isBestThird: boolean;
+}
+
+export interface GroupApiItem {
+  group: string;
+  teams: GroupTeamApiItem[];
+}
+
+export interface GroupTeamRowModel {
+  teamId: string;
+  teamName: string;
+  confederation: string;
+  played: number;
+  wins: number;
+  draws: number;
+  losses: number;
+  goalsFor: number;
+  goalsAgainst: number;
+  goalDifference: number;
+  goalDifferenceLabel: string;
+  points: number;
+  position: number;
+  isQualified: boolean;
+  isBestThird: boolean;
+  isSelectedTeam: boolean;
+  qualificationBadge: string;
+}
+
+export interface GroupTableModel {
+  group: string;
+  matchesPlayed: number;
+  hasBestThird: boolean;
+  teams: GroupTeamRowModel[];
+}
+
+export interface GroupsScreenModel {
+  groups: GroupTableModel[];
+  userTeamId: string;
+  userGroupId: string;
+}
