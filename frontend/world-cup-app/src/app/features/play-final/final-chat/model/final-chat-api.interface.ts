@@ -73,4 +73,7 @@ export interface FinalChatTeamsPreviewApiResponse {
   opponentName: string;
   opponentFlag: string;
   worldCupStatus: string;
+  hasActiveFinal: boolean;
+  canResimulate: boolean;
+  canStartFinal: boolean;
 }
