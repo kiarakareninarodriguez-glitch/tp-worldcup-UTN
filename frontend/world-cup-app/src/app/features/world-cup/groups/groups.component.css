@@ -33,3 +33,65 @@
 .qualification-mark-best-third {
   color: #2196f3;
 }
+
+
+/* Tabs de grupos */
+.group-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 16px;
+}
+
+.group-tab {
+  padding: 6px 14px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-primary);
+  cursor: pointer;
+  font-size: 13px;
+  transition: background 0.15s, color 0.15s;
+}
+
+.group-tab:hover {
+  background: var(--bg-hover);
+}
+
+.group-tab-active {
+  background: var(--team-primary);
+  color: #fff;
+  border-color: var(--team-primary);
+  font-weight: 700;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  table-layout: fixed;
+}
+
+table th,
+table td {
+  padding: 8px 6px;
+  text-align: center;
+  border-bottom: 1px solid var(--border-color);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+table td:nth-child(2),
+table th:nth-child(2) {
+  text-align: left;
+  width: 150px;
+}
+
+table td:nth-child(3),
+table th:nth-child(3) {
+  width: 70px;
+}
+table th:nth-child(2) {
+  text-align: left;
+}
