@@ -43,7 +43,7 @@ export class AppComponent implements OnInit {
     'route.worldCup.groups.title': 'Fase de grupos',
     'route.worldCup.groups.subtitle': 'Pendiente de desarrollo por el alumno',
     'route.worldCup.journey.title': 'Camino del equipo',
-    'route.worldCup.journey.subtitle': 'Pendiente de desarrollo por el alumno',
+    'route.worldCup.journey.subtitle': '  El camino de los Campeones',
     'route.worldCup.matches.title': 'Partidos',
     'route.worldCup.matches.subtitle': 'Pendiente de desarrollo por el alumno',
     'route.worldCup.stats.title': 'Estadísticas y premios',

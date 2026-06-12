@@ -1,5 +1,3 @@
-// ─── WorldCupAPI raw response shapes ────────────────────────────────────────
-
 export interface JourneyMatchApiItem {
   stage?: string;
   stageLabel?: string;
@@ -35,7 +33,6 @@ export interface JourneyApiRawResponse {
   matches?: JourneyMatchApiItem[];
 }
 
-// ─── WorldCupCore model shape (returned to frontend) ────────────────────────
 
 export interface JourneyScreenModel {
   worldCupId: string;
