@@ -3,12 +3,23 @@ import { BaseApiService } from 'src/app/core/services/base-api.service';
 import { UiVisualsService } from 'src/app/core/services/ui-visuals.service';
 import { AdminService } from 'src/app/shared/admin/service/admin.service';
 import { FinalChatViewModel } from '../model/final-chat-view-model.interface';
-
+import {
+    Observable,
+    catchError,
+    combineLatest,
+    finalize,
+    map,
+    of,
+    switchMap,
+    tap,
+} from 'rxjs';
+import { FinalChatApiResponse, FinalChatTeamsPreviewApiResponse } from '../model/final-chat-api.interface';
+import { HttpErrorResponse } from '@angular/common/http';
 @Injectable({ providedIn: 'root' })
 export class FinalChatService extends BaseApiService {
     private readonly adminService = inject(AdminService);
     private readonly uiVisualsService = inject(UiVisualsService);
-    
+
     private readonly pageState: FinalChatViewModel = {
         lang: 'es',
         loading: false,
@@ -20,12 +31,152 @@ export class FinalChatService extends BaseApiService {
         data: null,
         teamsPreview: null
     };
-    
+    private hasInitialized = false;
+
+
+    getViewModel(): FinalChatViewModel {
+        return this.pageState;
+    }
+
     initialize() {
 
+        if (this.hasInitialized) {
+            this.loadPreview().subscribe();
+            return;
+        }
+
+        this.hasInitialized = true;
+        this.pageState.lang = this.getCurrentLang();
+
+        combineLatest([
+            this.appContextService.currentTeamId$,
+            this.appContextService.lang$,
+            this.appContextService.worldCupRefresh$,
+        ])
+            .pipe(
+                tap(([, lang]) => (this.pageState.lang = lang === 'en' ? 'en' : 'es')),
+                switchMap(() => this.loadPreview()),
+            )
+            .subscribe();
+
+
 
     }
-    getViewModel(): FinalChatViewModel {
-      return this.pageState;
+
+    private loadPreview(): Observable<void> {
+
+        const lang = this.getCurrentLang();
+        this.pageState.lang = lang;
+        this.pageState.loading = true;
+        this.pageState.errorMessage = '';
+
+        return this.get<FinalChatTeamsPreviewApiResponse>('/final-match/preview', { lang })
+            .pipe(
+                map((response) => response.data),
+                map((previewResponse) => this.normalizePreview(previewResponse)),
+                tap((previewResponse) => (this.pageState.teamsPreview = previewResponse)),
+                tap(() => (this.pageState.showNoFinalState = false)),
+                map(() => undefined),
+                catchError((error: HttpErrorResponse) => {
+                    if (this.isMatchUnavailableError(error)) {
+                        this.pageState.teamsPreview = null;
+                        this.pageState.showNoFinalState = true;
+                        this.pageState.errorMessage = '';
+                        return of(undefined);
+                    }
+                    if (this.isMatchNotFound(error)) {
+                        this.pageState.teamsPreview = null;
+                        this.pageState.showNoFinalState = true;
+                        this.pageState.errorMessage = 'No hay final creada - inicie simulacion';
+                        return of(undefined);
+
+                    }
+
+
+                    this.pageState.teamsPreview = null;
+                    this.pageState.showNoFinalState = true;
+                    this.pageState.errorMessage = 'No se pudieron cargar los datos de la final.';
+                    return of(undefined);
+                }),
+                finalize(() => (this.pageState.loading = false)),
+            );
+
+
+
     }
+    private normalizePreview(
+        previewResponse: FinalChatTeamsPreviewApiResponse | null | undefined,
+    ): FinalChatTeamsPreviewApiResponse | null {
+        if (!previewResponse) {
+            return null;
+        }
+
+        return {
+            ...previewResponse,
+
+        };
+    }
+
+    private isMatchUnavailableError(error: HttpErrorResponse): boolean {
+        const messageCode = (error?.error as { responseMessage?: { messageCode?: string } } | undefined)
+            ?.responseMessage?.messageCode;
+
+        return messageCode === 'WC_FINAL_CHAT_PREVIEW_UNAVAILABLE';
+    }
+    private isMatchNotFound(error: HttpErrorResponse): boolean {
+        const messageCode = (error?.error as { responseMessage?: { messageCode?: string } } | undefined)
+            ?.responseMessage?.messageCode;
+
+        return messageCode === 'WC_FINAL_CHAT_PREVIEW_NOT_FOUND';
+    }
+
+    startFinal(): Observable<void> {
+        this.pageState.starting = true;
+        this.pageState.actionErrorMessage = '';
+        const lang = this.getCurrentLang();
+
+        // Asumo que la API te devuelve un objeto con la data del chat (ej: FinalChatResponse)
+        return this.get<FinalChatApiResponse>('/final-match/start', { lang }).pipe(
+            // 'response.data' contiene la estructura del chat activo
+            map((response) => response.data),
+            tap((chatActiveData) => {
+                // Guardamos la data del chat en el estado. 
+                // Al hacer esto, el HTML va a reaccionar instantáneamente.
+                this.pageState.data = chatActiveData;
+                //this.loadPreview()
+            }),
+            map(() => undefined), // Mapeamos a void para mantener la firma limpia
+            catchError((error: HttpErrorResponse) => {
+                this.pageState.actionErrorMessage = 'No se pudo iniciar el chat.';
+                return of(undefined);
+            }),
+            finalize(() => {
+                this.pageState.starting = false;
+            })
+        );
+    }
+
+    playFinal(option: string): Observable<void> {
+        //TODO llamar jugar opcion de la final
+        this.pageState.sending = true;
+        this.pageState.actionErrorMessage = '';
+        const lang = this.getCurrentLang();
+
+        return this.get<FinalChatApiResponse>('/final-match/play-option', { option, lang }).pipe(
+            map((response) => response.data),
+            tap((updatedChatData) => {
+                // Actualiza el flujo de mensajes/opciones con la nueva respuesta
+                this.pageState.data = updatedChatData;
+            }),
+            map(() => undefined),
+            catchError((error: HttpErrorResponse) => {
+                this.pageState.actionErrorMessage = 'No se pudo procesar la opción seleccionada.';
+                return of(undefined);
+            }),
+            finalize(() => {
+                this.pageState.sending = false;
+            })
+        );
+    }
+
 }
