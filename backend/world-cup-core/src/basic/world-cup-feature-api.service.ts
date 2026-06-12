@@ -56,6 +56,10 @@ export class WorldCupFeatureApiService extends AbstractBaseService {
     });
   }
 
+  public async getTeamRivals(teamId: string): Promise<TeamCatalogApiItem[]> {
+    return this.getEndpointData<TeamCatalogApiItem[]>(`/teams/${teamId}/rivals`);
+  }
+
   public async listTeams(teamId?: string, name?: string): Promise<TeamCatalogApiItem[]> {
     return this.getEndpointData<TeamCatalogApiItem[]>('/teams', {
       teamId: teamId?.trim().toLowerCase(),
