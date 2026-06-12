@@ -1,6 +1,21 @@
-<section class="card">
-  <div class="card-header">
-    <span class="card-title">Eventos en vivo</span>
+<div style="padding: 20px;">
+  <h2>Eventos en Vivo - La Final</h2>
+
+  <div *ngIf="eventos.length > 0; else loading">
+    <h3>Partidos en vivo</h3>
+
+    <div *ngFor="let partido of eventos" style="margin-bottom: 15px;">
+      <p>
+        <strong>{{ partido.homeTeam }}</strong> vs <strong>{{ partido.awayTeam }}</strong>
+      </p>
+      <p>
+        Estado: {{ partido.status }} | Minuto: {{ partido.minute }}
+      </p>
+      <hr>
+    </div>
   </div>
-  <p>Este componente debe ser desarrollado por el alumno.</p>
-</section>
+
+  <ng-template #loading>
+    <p>Cargando datos del partido en vivo...</p>
+  </ng-template>
+</div>
