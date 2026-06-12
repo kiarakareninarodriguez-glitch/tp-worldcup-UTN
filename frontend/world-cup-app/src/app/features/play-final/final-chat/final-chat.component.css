@@ -136,3 +136,15 @@
   border-color: rgba(240, 110, 110, 0.64);
   color: #ffd2d2;
 }
+
+
+.info-squad{
+  font-size: 12px; 
+  line-height: 1.6;
+}
+
+.info-separador{
+  border: 0; 
+  border-top: 1px solid var(--border-color); 
+  margin: 6px 0;
+}
