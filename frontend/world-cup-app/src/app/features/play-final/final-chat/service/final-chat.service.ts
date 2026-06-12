@@ -78,6 +78,9 @@ export class FinalChatService extends BaseApiService {
                 tap(() => (this.pageState.showNoFinalState = false)),
                 map(() => undefined),
                 catchError((error: HttpErrorResponse) => {
+              
+                    
+
                     if (this.isMatchUnavailableError(error)) {
                         this.pageState.teamsPreview = null;
                         this.pageState.showNoFinalState = true;
@@ -87,7 +90,7 @@ export class FinalChatService extends BaseApiService {
                     if (this.isMatchNotFound(error)) {
                         this.pageState.teamsPreview = null;
                         this.pageState.showNoFinalState = true;
-                        this.pageState.errorMessage = 'No hay final creada - inicie simulacion';
+                        this.pageState.errorMessage = 'inicie simulacion del final primero';
                         return of(undefined);
 
                     }
@@ -113,9 +116,13 @@ export class FinalChatService extends BaseApiService {
 
         return {
             ...previewResponse,
+            teamFlag: this.uiVisualsService.getTeamFlag(previewResponse.teamId),
+            opponentFlag: this.uiVisualsService.getTeamFlag(previewResponse.opponentId),
 
         };
     }
+
+
 
     private isMatchUnavailableError(error: HttpErrorResponse): boolean {
         const messageCode = (error?.error as { responseMessage?: { messageCode?: string } } | undefined)
@@ -136,15 +143,16 @@ export class FinalChatService extends BaseApiService {
         const lang = this.getCurrentLang();
 
         // Asumo que la API te devuelve un objeto con la data del chat (ej: FinalChatResponse)
-        return this.get<FinalChatApiResponse>('/final-match/start', { lang }).pipe(
+        return this.post<FinalChatApiResponse>('/final-match/start', { lang }).pipe(
             // 'response.data' contiene la estructura del chat activo
             map((response) => response.data),
             tap((chatActiveData) => {
                 // Guardamos la data del chat en el estado. 
                 // Al hacer esto, el HTML va a reaccionar instantáneamente.
                 this.pageState.data = chatActiveData;
-                //this.loadPreview()
+                
             }),
+            switchMap(()=>this.loadPreview()),
             map(() => undefined), // Mapeamos a void para mantener la firma limpia
             catchError((error: HttpErrorResponse) => {
                 this.pageState.actionErrorMessage = 'No se pudo iniciar el chat.';

@@ -6,10 +6,10 @@ export enum MatchZone {
 }
 
 export const MatchZoneLabels: Record<MatchZone, string> = {
-  [MatchZone.DEFENSE_THIRD]: "el tercio defensivo",
-  [MatchZone.MIDFIELD]: "el mediocampo",
-  [MatchZone.ATTACK_THIRD]: "el tercio ofensivo",
-  [MatchZone.BOX]: "el area"
+  [MatchZone.DEFENSE_THIRD]: "Área local (Defensa)",
+  [MatchZone.MIDFIELD]: "Área Central (Centro)",
+  [MatchZone.ATTACK_THIRD]: "Área Rival (Ataque)",
+  [MatchZone.BOX]: "Área"
 };
 
 
