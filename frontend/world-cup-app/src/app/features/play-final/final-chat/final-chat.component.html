@@ -1,6 +1,113 @@
-<section class="card">
-  <div class="card-header">
-    <span class="card-title">Jugar la final</span>
+<ng-container *ngIf="pageState as pageState">
+  <div class="empty-state" *ngIf="pageState.loading">
+    <div class="empty-icon">⏳</div>
+    <p> buscando la final </p>
   </div>
-  <p>Este componente debe ser desarrollado por el alumno.</p>
-</section>
+
+  <div class="empty-state" *ngIf="!pageState.loading && pageState.errorMessage">
+    <div class="empty-icon">⚠️</div>
+    <p>{{ pageState.errorMessage }}</p>
+
+  </div>
+
+  <ng-container *ngIf="!pageState.loading && !pageState.errorMessage">
+    <div class="card" *ngIf="!pageState?.teamsPreview?.hasActiveFinal">
+      <div class="card-header">
+        Detalle del final
+      </div>
+      <div>
+        <form class="simulate-actions-controls" (submit)="$event.preventDefault()">
+          <button id="simulate-resimulate-button" type="button" class="btn btn-ghost" (click)="onStartfinal()"
+            [disabled]="pageState.starting ">
+            <span *ngIf="!pageState.starting">Iniciar mundial</span>
+            <span *ngIf="pageState.starting">mundial iniciado...</span>
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <div class="card" *ngIf="pageState?.teamsPreview?.hasActiveFinal && !pageState?.data">
+      <div class="card-header">
+        Detalle del final en curso
+      </div>
+      <div>
+        <form class="simulate-actions-controls" (submit)="$event.preventDefault()">
+          <button id="simulate-resimulate-button" type="button" class="btn btn-ghost" (click)="onStartfinal()"
+            [disabled]="pageState.starting ">
+            <span *ngIf="!pageState.starting">Continuar Evento</span>
+            <span *ngIf="pageState.starting">continuando...</span>
+          </button>
+        </form>
+      </div>
+    </div>
+    <div class="card" *ngIf="pageState?.teamsPreview?.hasActiveFinal && pageState?.data">
+
+      <div class="card-title">Chat Final</div>
+      <div class="chat-layout">
+        <div class="chat-panel">
+        </div>
+        <div class="chat-side">
+          <div class="score-card">
+            <div class="score-teams">
+              <div class="score-teams-matchup">
+                <span class="score-team">
+                  <span class="score-team-flag">{{pageState?.teamsPreview?.teamFlag}}</span>
+                  {{pageState?.teamsPreview?.teamName}}
+                </span>
+                <span class="score-vs">VS</span>
+                <span class="score-team">
+                  {{pageState?.teamsPreview?.opponentName}} <span
+                    class="score-team-flag">{{pageState?.teamsPreview?.opponentFlag}}</span>
+                </span>
+              </div>
+
+            </div>
+            <div class="score-value">{{pageState?.data?.score}}</div>
+            <div class="score-minute">Minuto: {{pageState?.data?.minute}}' | Turno: {{pageState?.data?.turn}}</div>
+          </div>
+
+          <div class="on-field-box">
+            <div class="of-label">Estado en el Campo</div>
+            <div><span class="stat-label">Posesión:</span> {{pageState?.data?.possession}}</div>
+            <div><span class="stat-label">Zona actual:</span> {{pageState?.data?.zoneLabel}}</div>
+          </div>
+
+          <div class="strategy-box">
+            <h3>TÁCTICA EN VIVO ({{pageState?.teamsPreview?.teamName}})</h3>
+            <div>
+              <label class="stat-label">Formación:</label>
+              <select class="form-select">
+                <option>prueba</option>
+                <option>4-4-2</option>
+                <option>3-5-2</option>
+              </select>
+            </div>
+            <div>
+              <label class="stat-label">Estrategia:</label>
+              <select class="form-select">
+                <option>prueba</option>
+                <option>Equilibrada</option>
+                <option>Contraataque</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="strategy-box">
+            <h3>INFORMACIÓN DE LOS EQUIPOS</h3>
+            <div >
+              <p><span class="stat-label">Tu DT:</span> {{pageState?.data?.teamCoachName}} ({{pageState?.data?.teamCoachProfile}})</p>
+              <hr >
+              <p><span class="stat-label">DT Rival:</span> {{pageState?.data?.opponentCoachName}} ({{pageState?.data?.opponentCoachProfile}})</p>
+              <p><span class="stat-label">Rival Táctica:</span> {{pageState?.data?.opponentFormation}} ({{pageState?.data?.opponentStrategyLabel}})</p>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+
+  </ng-container>
+
+
+

@@ -12,6 +12,8 @@ import { MatchStrategiesResponse } from './model/api/match-strategies-response.m
 import { MatchStrategyLabels } from './model/api/match-strategy.enum';
 import { MatchZoneLabels } from './model/api/match-zone.enum';
 import { MatchformationsResponse } from './model/api/match-formations-response.mode';
+import { MatchPossessionLabels } from './model/api/match-possession.enum';
+import { MatchCoachProfileLabels } from 'src/teams/services/model/api/coach-profile.enum';
 
 
 
@@ -115,7 +117,7 @@ export class PlayFinalService extends AbstractBaseService {
       score: matchCurrrent.score,
       zone: matchCurrrent.zone,
       zoneLabel: MatchZoneLabels[matchCurrrent.zone],
-      possession: matchCurrrent.possession,
+      possession: MatchPossessionLabels[matchCurrrent.possession],
       ballCarrier: matchCurrrent.ballCarrier,
       eventType: matchCurrrent.eventType,
       teamName: matchCurrrent.teamName,
@@ -123,12 +125,12 @@ export class PlayFinalService extends AbstractBaseService {
       opponentName: matchCurrrent.opponentName,
       opponentFlag: '',
       teamCoachName: matchCurrrent.teamCoachName,
-      teamCoachProfile: matchCurrrent.teamCoachProfile,
+      teamCoachProfile: MatchCoachProfileLabels[matchCurrrent.teamCoachProfile],
       teamStrategy: matchCurrrent.teamStrategy,
       teamStrategyLabel: MatchStrategyLabels[matchCurrrent.teamStrategy],
       teamFormation: matchCurrrent.teamFormation,
       opponentCoachName: matchCurrrent.opponentCoachName,
-      opponentCoachProfile: matchCurrrent.opponentCoachProfile,
+      opponentCoachProfile: MatchCoachProfileLabels[matchCurrrent.opponentCoachProfile],
       opponentStrategy: matchCurrrent.opponentStrategy,
       opponentStrategyLabel: MatchStrategyLabels[matchCurrrent.opponentStrategy],
       opponentFormation: matchCurrrent.opponentFormation,
