@@ -139,11 +139,9 @@ export class WorldCupFeatureApiService extends AbstractBaseService {
     });
   }
   
-  public async playMatch(matchId: string, input?: string,messageTypeId?: string, lang?: string): Promise<unknown> {
-    return this.postEndpointData<unknown>('/match/play', {
-      matchId,
-      input,
-      messageTypeId,
+  public async playMatch( selectedOption?: number, lang?: string): Promise<MatchStartFinalResponse> {
+    return this.postEndpointData<MatchStartFinalResponse>('/match/play', {
+      selectedOption,
       lang: this.resolveLang(lang),
     });
   }

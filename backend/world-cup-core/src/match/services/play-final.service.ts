@@ -7,7 +7,7 @@ import { LanguageEnum } from 'src/basic/model/language.enum';
 import { ApiErrorMappingRule, ApiErrorStatusMap, ErrorUtils } from 'src/basic/error/error.utils';
 import { WorldCupCoreErrorCode } from 'src/basic/model/world-cup-core-error-code.enum';
 import { CurrentWorldCupApiResponse } from 'src/world-cup/services/model/simulation-service.interface';
-import { MatchStartFinalResponse } from './model/api/match-start-final-response.model';
+import { MatchStartFinalResponse, MessageItems } from './model/api/match-start-final-response.model';
 import { MatchStrategiesResponse } from './model/api/match-strategies-response.mode';
 import { MatchStrategyLabels } from './model/api/match-strategy.enum';
 import { MatchZoneLabels } from './model/api/match-zone.enum';
@@ -84,7 +84,23 @@ export class PlayFinalService extends AbstractBaseService {
   }
 
   public async play(option: number, lang: LanguageEnum): Promise<FinalChatApiResponse> {
-    throw new Error('Method not implemented.');
+    try {
+
+      const teamId = this.getCurrentTeamId();
+      const resolvedLang = this.resolveLang(lang);
+      const matchCurrrent: MatchStartFinalResponse = await this.worldCupFeatureApiService.playMatch(option, resolvedLang);
+      const strategyCatalog: MatchStrategiesResponse[] = await this.worldCupFeatureApiService.getStrategiesMatch(resolvedLang);
+      const formationCatalog: MatchformationsResponse[] = await this.worldCupFeatureApiService.getFormationsMatch(resolvedLang);
+
+      return this.buildchatScreen(matchCurrrent, strategyCatalog, formationCatalog, resolvedLang);
+    } catch (error) {
+      ErrorUtils.mapWorldCupApiError(
+        error,
+        FINAL_CHAT_PREVIEW_API_ERROR_STATUS_MAP,
+        FINAL_CHAT_PREVIEW_API_ERROR_FALLBACK,
+      );
+    }
+    return null;
   }
   public async start(lang: LanguageEnum): Promise<FinalChatApiResponse> {
     try {
@@ -146,7 +162,7 @@ export class PlayFinalService extends AbstractBaseService {
           teamId: item.teamId,
           teamName: item.teamName,
           playerName: item.playerName,
-          bubbleRole: "user",
+          bubbleRole: this.calcularRole(item),
           icon: ""
         } as FinalChatMessageApiItem
       }),
@@ -167,5 +183,14 @@ export class PlayFinalService extends AbstractBaseService {
     };
 
     return response;
+  }
+  calcularRole(item: MessageItems): "system" | "bot" | "user" {
+    if(item.type=="PLAYER_ACTION"){
+      return 'user';
+    }
+    if(item.type=="OPPONENT_REACTION"){
+      return "bot"
+    }
+    return "system"
   }
 }

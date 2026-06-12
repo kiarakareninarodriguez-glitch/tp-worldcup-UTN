@@ -16,9 +16,11 @@
         Detalle del final
       </div>
       <div>
-        <form class="simulate-actions-controls" (submit)="$event.preventDefault()">
-          <button id="simulate-resimulate-button" type="button" class="btn btn-ghost" (click)="onStartfinal()"
-            [disabled]="pageState.starting ">
+        <span class="vs-container">{{pageState?.teamsPreview?.worldCupStatus == 'ENDED'?'Mundial Finalizado':'Mundial
+          Disponible'}}</span>
+        <form class=" vs-container btn quick-option-btn" (submit)="$event.preventDefault()">
+          <button id="simulate-resimulate-button" type="button" class="btn btn-primary" (click)="onStartfinal()"
+            [disabled]="!pageState?.teamsPreview?.canStartFinal">
             <span *ngIf="!pageState.starting">Iniciar mundial</span>
             <span *ngIf="pageState.starting">mundial iniciado...</span>
           </button>
@@ -26,13 +28,14 @@
       </div>
     </div>
 
+
     <div class="card" *ngIf="pageState?.teamsPreview?.hasActiveFinal && !pageState?.data">
       <div class="card-header">
         Detalle del final en curso
       </div>
       <div>
-        <form class="simulate-actions-controls" (submit)="$event.preventDefault()">
-          <button id="simulate-resimulate-button" type="button" class="btn btn-ghost" (click)="onStartfinal()"
+        <form class="vs-container btn quick-option-btn" (submit)="$event.preventDefault()">
+          <button id="simulate-resimulate-button" type="button" class="btn btn-primary" (click)="onStartfinal()"
             [disabled]="pageState.starting ">
             <span *ngIf="!pageState.starting">Continuar Evento</span>
             <span *ngIf="pageState.starting">continuando...</span>
@@ -45,6 +48,50 @@
       <div class="card-title">Chat Final</div>
       <div class="chat-layout">
         <div class="chat-panel">
+
+          <div class="chat-messages">
+
+            <div *ngFor="let msg of pageState?.data?.messageItems" class="chat-msg {{msg.bubbleRole}}">
+              <div class="chat-bubble">
+                {{msg.icon}} {{msg.text}}
+              </div>
+            </div>
+
+          </div>
+
+          <div class="padding-x-sm separation-option">
+            <div class="quick-options-list">
+
+              <button class="btn quick-option-btn quick-option-btn-{{option.action =='QUIT_MATCH'?'danger':'accent'}}"
+                *ngFor="let option of pageState?.data?.options" (click)="onSelectOption(option)">
+                {{option.label}}
+              </button>
+            </div>
+          </div>
+
+          <div *ngIf="sugerencias.length > 0" class="padding-x-sm sugerencias">
+            <small class="sugerencias-input">
+              Sugerencias disponibles (Escribe o haz click):
+            </small>
+            <div class="quick-options-list">
+              <button type="button" *ngFor="let opcion of sugerencias" class="quick-option-btn quick-option-btn-accent"
+                (click)="seleccionarSugerencia(opcion)">
+                {{ opcion.index }} - {{ opcion.label }}
+              </button>
+            </div>
+
+          </div>
+
+          <div class="chat-input-row" *ngIf="!pageState?.data?.isFinished">
+            <input type="text" [(ngModel)]="textoInput" (input)="filtrarSugerencias()" class="form-control"
+              placeholder="Escribe una orden al equipo...">
+            <button class="btn btn-primary" [disabled]="!esOpcionValida()" (click)="enviarOrden()" >Enviar</button>
+          </div>
+          <div *ngIf="textoInput.trim().length > 0 && !esOpcionValida()" class="helper-iput">
+            Orden no reconocida. Revisa el número o el texto.
+          </div>
+
+
         </div>
         <div class="chat-side">
           <div class="score-card">
@@ -95,10 +142,13 @@
           <div class="strategy-box">
             <h3>INFORMACIÓN DE LOS EQUIPOS</h3>
             <div class="info-squad">
-              <p><span class="stat-label">Tu DT:</span> {{pageState?.data?.teamCoachName}} ({{pageState?.data?.teamCoachProfile}})</p>
+              <p><span class="stat-label">Tu DT:</span> {{pageState?.data?.teamCoachName}}
+                ({{pageState?.data?.teamCoachProfile}})</p>
               <hr class="info-separador">
-              <p><span class="stat-label">DT Rival:</span> {{pageState?.data?.opponentCoachName}} ({{pageState?.data?.opponentCoachProfile}})</p>
-              <p><span class="stat-label">Rival Táctica:</span> {{pageState?.data?.opponentFormation}} ({{pageState?.data?.opponentStrategyLabel}})</p>
+              <p><span class="stat-label">DT Rival:</span> {{pageState?.data?.opponentCoachName}}
+                ({{pageState?.data?.opponentCoachProfile}})</p>
+              <p><span class="stat-label">Rival Táctica:</span> {{pageState?.data?.opponentFormation}}
+                ({{pageState?.data?.opponentStrategyLabel}})</p>
             </div>
           </div>
         </div>
@@ -108,4 +158,3 @@
     </div>
 
   </ng-container>
-

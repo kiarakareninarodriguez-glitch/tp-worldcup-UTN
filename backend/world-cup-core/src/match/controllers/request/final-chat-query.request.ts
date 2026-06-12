@@ -1,6 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
-import { IsEnum, IsOptional} from 'class-validator';
+import { IsEnum, IsInt, IsNotEmpty, IsOptional} from 'class-validator';
 import { LanguageEnum } from '../../../basic/model/language.enum';
 
 export class FinalChatQueryPreviewRequest {
@@ -33,6 +33,8 @@ export class FinalChatBodyPlay {
   lang?: LanguageEnum;
 
   @ApiProperty({ example: 1, description: 'Opción numérica elegida por el usuario para el turno' })
+  @IsInt({ message: 'La opción debe ser un número entero' }) 
+  @IsNotEmpty()
   option:number;
 }
 

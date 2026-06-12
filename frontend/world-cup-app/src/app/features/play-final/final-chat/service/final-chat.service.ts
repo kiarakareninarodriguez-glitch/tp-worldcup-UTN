@@ -78,8 +78,8 @@ export class FinalChatService extends BaseApiService {
                 tap(() => (this.pageState.showNoFinalState = false)),
                 map(() => undefined),
                 catchError((error: HttpErrorResponse) => {
-              
-                    
+
+
 
                     if (this.isMatchUnavailableError(error)) {
                         this.pageState.teamsPreview = null;
@@ -146,13 +146,15 @@ export class FinalChatService extends BaseApiService {
         return this.post<FinalChatApiResponse>('/final-match/start', { lang }).pipe(
             // 'response.data' contiene la estructura del chat activo
             map((response) => response.data),
+            map((response) => this.normalizedata(response)),
+
             tap((chatActiveData) => {
                 // Guardamos la data del chat en el estado. 
                 // Al hacer esto, el HTML va a reaccionar instantáneamente.
                 this.pageState.data = chatActiveData;
-                
+
             }),
-            switchMap(()=>this.loadPreview()),
+            switchMap(() => this.loadPreview()),
             map(() => undefined), // Mapeamos a void para mantener la firma limpia
             catchError((error: HttpErrorResponse) => {
                 this.pageState.actionErrorMessage = 'No se pudo iniciar el chat.';
@@ -163,18 +165,36 @@ export class FinalChatService extends BaseApiService {
             })
         );
     }
+    normalizedata(response: FinalChatApiResponse): FinalChatApiResponse {
 
-    playFinal(option: string): Observable<void> {
+        return {
+            ...response,
+            teamFlag: this.uiVisualsService.getTeamFlag(response.teamId),
+            opponentFlag: this.uiVisualsService.getTeamFlag(response.opponentId),
+            messageItems: response.messageItems.map(msg => {
+                return {
+                    ...msg,
+                    icon: this.uiVisualsService.getFinalChatMessageIcon(msg.type)
+                }
+            })
+        };
+    }
+
+    playFinal(option: number): Observable<void> {
         //TODO llamar jugar opcion de la final
         this.pageState.sending = true;
         this.pageState.actionErrorMessage = '';
         const lang = this.getCurrentLang();
 
-        return this.get<FinalChatApiResponse>('/final-match/play-option', { option, lang }).pipe(
+        return this.post<FinalChatApiResponse>('/final-match/play', { option, lang }).pipe(
             map((response) => response.data),
+            map((response) => this.normalizedata(response)),
             tap((updatedChatData) => {
                 // Actualiza el flujo de mensajes/opciones con la nueva respuesta
-                this.pageState.data = updatedChatData;
+                this.pageState.data = {
+                    ...updatedChatData,
+                    messageItems: [...this.pageState.data?.messageItems ?? [], ...updatedChatData.messageItems]
+                };
             }),
             map(() => undefined),
             catchError((error: HttpErrorResponse) => {
