@@ -136,3 +136,37 @@
   border-color: rgba(240, 110, 110, 0.64);
   color: #ffd2d2;
 }
+
+
+.info-squad {
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.info-separador {
+  border: 0;
+  border-top: 1px solid var(--border-color);
+  margin: 6px 0;
+}
+
+.separation-option {
+  padding: 0 12px;
+}
+
+.sgerencias {
+  padding: 8px 12px;
+}
+
+.sugerencias-input {
+  color: var(--text-muted);
+  display: block;
+  margin-bottom: 4px;
+  font-size: 11px;
+}
+
+.helperinput {
+  padding: 0 12px 8px;
+  color: #ff9d9d;
+  font-size: 11px;
+
+}
