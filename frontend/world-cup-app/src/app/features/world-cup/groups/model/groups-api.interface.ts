@@ -28,6 +28,7 @@ export interface GroupTableApiItem {
 }
 
 export interface GroupsApiResponse {
+  data: any;
   teamId: string;
   worldCupId: string | null;
   worldCupStatus: string | null;

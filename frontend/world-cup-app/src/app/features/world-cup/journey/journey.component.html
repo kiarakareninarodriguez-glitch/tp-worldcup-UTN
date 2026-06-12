@@ -1,6 +1,6 @@
 <div class="empty-state" *ngIf="pageState.loading">
   <div class="empty-icon">⏳</div>
-  <p>Cargando camino del equipo...</p>
+  <p>Cargando camino del equipo...Hal</p>
 </div>
 
 <div class="empty-state" *ngIf="!pageState.loading && pageState.errorMessage">
@@ -38,7 +38,7 @@
         </div>
         <div class="stat-box champion-box" *ngIf="journey.isChampion">
           <span class="stat-value">⭐</span>
-          <span class="stat-label">¡Campeón!</span>
+          <span class="stat-label">¡CAMPEON OLE OLE OLA!</span>
         </div>
         <div class="stat-box" *ngIf="!journey.isChampion && journey.eliminatedByTeamName">
           <span class="stat-value eliminated-label">Eliminado por</span>
@@ -68,7 +68,7 @@
         <div class="timeline-content">
           <div class="match-row">
             <div class="opponent">
-              <span class="opponent-flag">{{ match.opponentFlag }}</span>
+              <span class="opponent-flag">{{ getFlag(match.opponentTeamId) }}</span>
               <span class="opponent-name">{{ match.opponentTeamName }}</span>
             </div>
 
