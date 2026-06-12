@@ -85,7 +85,7 @@
           <div class="chat-input-row" *ngIf="!pageState?.data?.isFinished">
             <input type="text" [(ngModel)]="textoInput" (input)="filtrarSugerencias()" class="form-control"
               placeholder="Escribe una orden al equipo...">
-            <button class="btn btn-primary" [disabled]="!esOpcionValida()" (click)="enviarOrden()" >Enviar</button>
+            <button class="btn btn-primary" [disabled]="!esOpcionValida()" (click)="enviarOrden()">Enviar</button>
           </div>
           <div *ngIf="textoInput.trim().length > 0 && !esOpcionValida()" class="helper-iput">
             Orden no reconocida. Revisa el número o el texto.
@@ -123,18 +123,20 @@
             <h3>TÁCTICA EN VIVO ({{pageState?.teamsPreview?.teamName}})</h3>
             <div>
               <label class="stat-label">Formación:</label>
-              <select class="form-select">
-                <option>prueba</option>
-                <option>4-4-2</option>
-                <option>3-5-2</option>
+              <select class="form-control" [ngModel]="pageState?.data?.teamFormation"
+                (ngModelChange)="cambiarFormacion($event)">>
+                <option *ngFor="let item of pageState?.data?.formationCatalog" [value]="item.formation">
+                  {{ item.formation }}
+                </option>
               </select>
             </div>
             <div>
               <label class="stat-label">Estrategia:</label>
-              <select class="form-select">
-                <option>prueba</option>
-                <option>Equilibrada</option>
-                <option>Contraataque</option>
+              <select class="form-control" [ngModel]="pageState?.data?.teamStrategy"
+                (ngModelChange)="cambiarEstrategia($event)">
+                <option *ngFor="let item of pageState?.data?.strategyCatalog" [value]="item.strategy">
+                  {{ item.strategyLabel }}
+                </option>
               </select>
             </div>
           </div>

@@ -7,11 +7,11 @@ import { LanguageEnum } from 'src/basic/model/language.enum';
 import { ApiErrorMappingRule, ApiErrorStatusMap, ErrorUtils } from 'src/basic/error/error.utils';
 import { WorldCupCoreErrorCode } from 'src/basic/model/world-cup-core-error-code.enum';
 import { CurrentWorldCupApiResponse } from 'src/world-cup/services/model/simulation-service.interface';
-import { MatchStartFinalResponse, MessageItems } from './model/api/match-start-final-response.model';
+import { MatchStartFinalResponse, MessageItems, SelectStrategyResponse } from './model/api/match-start-final-response.model';
 import { MatchStrategiesResponse } from './model/api/match-strategies-response.mode';
 import { MatchStrategyLabels } from './model/api/match-strategy.enum';
 import { MatchZoneLabels } from './model/api/match-zone.enum';
-import { MatchformationsResponse } from './model/api/match-formations-response.mode';
+import { MatchformationsResponse, SelectFormationResponse } from './model/api/match-formations-response.mode';
 import { MatchPossessionLabels } from './model/api/match-possession.enum';
 import { MatchCoachProfileLabels } from 'src/teams/services/model/api/coach-profile.enum';
 
@@ -192,5 +192,42 @@ export class PlayFinalService extends AbstractBaseService {
       return "bot"
     }
     return "system"
+  }
+
+
+  public async selectformation(formation: string, lang: LanguageEnum): Promise<SelectFormationResponse> {
+     try {
+
+      const teamId = this.getCurrentTeamId();
+      const resolvedLang = this.resolveLang(lang);
+      const selectFormationResponse: SelectFormationResponse = await this.worldCupFeatureApiService.selectFormationMatch(teamId,formation,resolvedLang)
+
+      return selectFormationResponse;
+    } catch (error) {
+      ErrorUtils.mapWorldCupApiError(
+        error,
+        FINAL_CHAT_PREVIEW_API_ERROR_STATUS_MAP,
+        FINAL_CHAT_PREVIEW_API_ERROR_FALLBACK,
+      );
+    }
+  }
+  public async selectStrategy(strategy: string, lang: LanguageEnum): Promise<SelectStrategyResponse> {
+     try {
+
+      const teamId = this.getCurrentTeamId();
+      const resolvedLang = this.resolveLang(lang);
+      console.log(teamId,strategy,resolvedLang)
+      const selectStrategyResponse: SelectStrategyResponse = await this.worldCupFeatureApiService.selectStrategyMatch(teamId,strategy, resolvedLang);
+
+      selectStrategyResponse.strategyLabel = MatchStrategyLabels[selectStrategyResponse.strategy];
+      
+      return selectStrategyResponse;
+    } catch (error) {
+      ErrorUtils.mapWorldCupApiError(
+        error,
+        FINAL_CHAT_PREVIEW_API_ERROR_STATUS_MAP,
+        FINAL_CHAT_PREVIEW_API_ERROR_FALLBACK,
+      );
+    }
   }
 }

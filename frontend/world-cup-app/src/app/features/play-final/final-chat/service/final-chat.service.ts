@@ -13,10 +13,11 @@ import {
     switchMap,
     tap,
 } from 'rxjs';
-import { FinalChatApiResponse, FinalChatTeamsPreviewApiResponse } from '../model/final-chat-api.interface';
+import { FinalChatApiResponse, FinalChatTeamsPreviewApiResponse, SelectFormationResponse, SelectStrategyResponse } from '../model/final-chat-api.interface';
 import { HttpErrorResponse } from '@angular/common/http';
 @Injectable({ providedIn: 'root' })
 export class FinalChatService extends BaseApiService {
+
     private readonly adminService = inject(AdminService);
     private readonly uiVisualsService = inject(UiVisualsService);
 
@@ -207,4 +208,57 @@ export class FinalChatService extends BaseApiService {
         );
     }
 
+    
+    setStrategy(strategy: string) {
+        //TODO llamar jugar opcion de la final
+        this.pageState.sending = true;
+        this.pageState.actionErrorMessage = '';
+        const lang = this.getCurrentLang();
+
+        return this.post<SelectStrategyResponse>('/final-match/select-strategy', { strategy, lang }).pipe(
+            map((response) => response.data),
+            tap((updatedStrategyData) => {
+                // Actualiza el flujo de mensajes/opciones con la nueva respuesta
+                if(this.pageState.data){
+                    this.pageState.data.teamStrategy=updatedStrategyData.strategy
+                    this.pageState.data.teamStrategyLabel=updatedStrategyData.strategyLabel?? ""
+                }
+
+                
+            }),
+            map(() => undefined),
+            catchError((error: HttpErrorResponse) => {
+                this.pageState.actionErrorMessage = 'No se pudo procesar la opción seleccionada.';
+                return of(undefined);
+            }),
+            finalize(() => {
+                this.pageState.sending = false;
+            })
+        );
+    }
+
+    setFormation(formation: string) {
+        //TODO llamar jugar opcion de la final
+        this.pageState.sending = true;
+        this.pageState.actionErrorMessage = '';
+        const lang = this.getCurrentLang();
+
+        return this.post<SelectFormationResponse>('/final-match/select-formation', { formation, lang }).pipe(
+            map((response) => response.data),
+            tap((updatedStrategyData) => {
+                if(this.pageState.data){
+                    this.pageState.data.teamFormation=updatedStrategyData.formation
+                }
+
+            }),
+            map(() => undefined),
+            catchError((error: HttpErrorResponse) => {
+                this.pageState.actionErrorMessage = 'No se pudo procesar la opción seleccionada.';
+                return of(undefined);
+            }),
+            finalize(() => {
+                this.pageState.sending = false;
+            })
+        ); 
+    }
 }

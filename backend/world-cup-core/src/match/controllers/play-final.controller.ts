@@ -2,7 +2,7 @@ import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { AbstractController } from 'src/basic/abstract.controller';
 import { PlayFinalService } from '../services/play-final.service';
-import { FinalChatBodyPlay, FinalChatBodyStart, FinalChatQueryPreviewRequest } from './request/final-chat-query.request';
+import { FinalChatBodyPlay, FinalChatBodySelectFormation, FinalChatBodySelectStrategy, FinalChatBodyStart, FinalChatQueryPreviewRequest } from './request/final-chat-query.request';
 
 @ApiTags('final-match')
 @Controller('final-match')
@@ -32,4 +32,18 @@ export class PlayFinalController extends AbstractController {
   public async play(@Body() body: FinalChatBodyPlay): Promise<unknown> {
     return this.createOkResponse(await this.playFinalService.play(body.option,body.lang));
   }
+
+  @Post('select-strategy')
+  @ApiOperation({ summary: 'World Cup - run play action' })
+  public async selectStrategy(@Body() body: FinalChatBodySelectStrategy): Promise<unknown> {
+    return this.createOkResponse(await this.playFinalService.selectStrategy(body.strategy,body.lang));
+  }
+
+  @Post('select-formation')
+  @ApiOperation({ summary: 'World Cup - run play action' })
+  public async selectformation(@Body() body: FinalChatBodySelectFormation): Promise<unknown> {
+    return this.createOkResponse(await this.playFinalService.selectformation(body.formation,body.lang));
+  }
+
+  
 }

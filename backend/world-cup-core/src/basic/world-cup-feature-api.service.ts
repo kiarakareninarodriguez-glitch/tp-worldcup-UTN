@@ -11,10 +11,10 @@ import type {
   TeamCatalogApiItem,
   TeamStatsApiResponse,
 } from '../world-cup/services/model/simulation-service.interface';
-import { MatchStartFinalResponse } from 'src/match/services/model/api/match-start-final-response.model';
+import { MatchStartFinalResponse, SelectStrategyResponse } from 'src/match/services/model/api/match-start-final-response.model';
 import { MatchCurrentSquadResponse } from 'src/match/services/model/api/match-current-quad-response.model';
 import { MatchStrategiesResponse } from 'src/match/services/model/api/match-strategies-response.mode';
-import { MatchformationsResponse } from 'src/match/services/model/api/match-formations-response.mode';
+import { MatchformationsResponse, SelectFormationResponse } from 'src/match/services/model/api/match-formations-response.mode';
 
 @Injectable()
 export class WorldCupFeatureApiService extends AbstractBaseService {
@@ -116,16 +116,16 @@ export class WorldCupFeatureApiService extends AbstractBaseService {
     });
   }
 
-  public async selectStrategyMatch(teamId: string,strategy: string, lang?: string): Promise<unknown> {
-    return this.postEndpointData<unknown>('/match/select-strategy', {
+  public async selectStrategyMatch(teamId: string,strategy: string, lang?: string): Promise<SelectStrategyResponse> {
+    return this.postEndpointData<SelectStrategyResponse>('/match/select-strategy', {
       teamId,
       strategy,
       lang: this.resolveLang(lang),
     });
   }
 
-  public async selectFormationMatch(teamId: string,formation: string, lang?: string): Promise<unknown> {
-    return this.postEndpointData<unknown>('/match/select-formation', {
+  public async selectFormationMatch(teamId: string,formation: string, lang?: string): Promise<SelectFormationResponse> {
+    return this.postEndpointData<SelectFormationResponse>('/match/select-formation', {
       teamId,
       formation,
       lang: this.resolveLang(lang),

@@ -77,5 +77,18 @@ export class FinalChatPageComponent implements OnInit {
   onSelectOption(currentOption: FinalChatOptionApiItem): void {
     this.pageService.playFinal(currentOption.index).subscribe()
   }
+
+  cambiarFormacion(formacion:string|undefined){
+    if(formacion){
+      this.pageService.setFormation(formacion).subscribe()
+    }
+
+  }
+  cambiarEstrategia(estrategia:string|undefined){
+    if(estrategia){
+      this.pageService.setStrategy(estrategia).subscribe()
+    }
+
+  }
 }
 

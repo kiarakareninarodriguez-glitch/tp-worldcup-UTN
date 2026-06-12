@@ -9,7 +9,6 @@ export interface MessageItems {
   teamName: string;
   playerName: string;
 }
-
 export interface MatchStartFinalResponse {
   teamId: string;
   matchId: string;
@@ -34,4 +33,14 @@ export interface MatchStartFinalResponse {
   opponentFormation: string;
   options: FinalChatOptionApiItem[];
   messageItems: MessageItems[];
+}
+
+
+export interface SelectStrategyResponse {
+  teamId: string
+  strategy: string
+  formation: string
+  formationAutoAdjusted: boolean
+  message: string
+  strategyLabel: string|undefined;
 }
