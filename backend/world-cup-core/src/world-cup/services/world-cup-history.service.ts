@@ -13,21 +13,31 @@ export class WorldCupHistoryService extends AbstractBaseService {
     super(adminService);
   }
 
-  public async getWorldCupHistory(): Promise<string[]> {
+  public async getWorldCupHistory(): Promise<unknown[]> {
+
+    // TODO: manejar errores, cambiar los type: unknown
     
       const worldCupsIds: string[] = await this.worldCupFeatureApiService.getWorldCupHistory();
 
-      const finishedWorldCups = [];
+      const finishedWorldCupsIds = [];
 
       for  (const worldCupId of worldCupsIds) { 
 
         const worldCup = await this.worldCupFeatureApiService.getWorldCupById(worldCupId);
 
         if (worldCup.status === "ENDED") {
-          finishedWorldCups.push(worldCup);
+          finishedWorldCupsIds.push(worldCupId);
         }
        }
-    return finishedWorldCups;
+    const finishedWorldCupsStats  = [];
+
+    for (const finishedWorldCupId of finishedWorldCupsIds){
+
+      const worldCup = await this.worldCupFeatureApiService.getWorldCupStatsById(finishedWorldCupId)
+
+      finishedWorldCupsStats.push(worldCup)
+    }
+    return finishedWorldCupsStats;
   }
 } 
 
