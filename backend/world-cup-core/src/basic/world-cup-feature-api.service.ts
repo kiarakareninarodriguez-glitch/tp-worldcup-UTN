@@ -12,7 +12,7 @@ import type {
   TeamStatsApiResponse,
 } from '../world-cup/services/model/simulation-service.interface';
 import { MatchSquadResponse } from 'src/match/services/model/api/match-squad-response.model';
-import { WorldCupByIdApiResponse, WorldCupStatsByIdApiResponse, WorldCupAwardsByIdApiResponse } from 'src/world-cup/services/model/world-cup-history.interface';
+import { WorldCupByIdApiResponse, WorldCupStatsByIdApiResponse, WorldCupAwardsByIdApiResponse } from 'src/world-cup/services/model/world-cup-history-service.interface';
 
 @Injectable()
 export class WorldCupFeatureApiService extends AbstractBaseService {
