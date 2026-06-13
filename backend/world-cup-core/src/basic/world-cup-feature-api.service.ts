@@ -11,6 +11,8 @@ import type {
   TeamCatalogApiItem,
   TeamStatsApiResponse,
 } from '../world-cup/services/model/simulation-service.interface';
+import { MatchSquadResponse } from 'src/match/services/model/api/match-squad-response.model';
+import { WorldCupByIdApiResponse, WorldCupStatsByIdApiResponse, WorldCupAwardsByIdApiResponse } from 'src/world-cup/services/model/world-cup-history-service.interface';
 import { MatchStartFinalResponse, SelectStrategyResponse } from 'src/match/services/model/api/match-start-final-response.model';
 import { MatchCurrentSquadResponse } from 'src/match/services/model/api/match-current-quad-response.model';
 import { MatchStrategiesResponse } from 'src/match/services/model/api/match-strategies-response.mode';
@@ -96,6 +98,22 @@ export class WorldCupFeatureApiService extends AbstractBaseService {
     { lang: this.resolveLang(lang) },
   );
 }
+  public async getWorldCupHistory(): Promise<string[]> {
+    return this.getEndpointData<string[]>('/world-cup/history');
+  }
+
+  public async getWorldCupById(id: string): Promise <WorldCupByIdApiResponse>{
+    return this.getEndpointData<WorldCupByIdApiResponse>(`/world-cup/${id}`,{})
+  }
+
+  public async getWorldCupStatsById(id: string): Promise <WorldCupStatsByIdApiResponse>{
+    return this.getEndpointData<WorldCupStatsByIdApiResponse>(`/world-cup/${id}/stats`,{})
+  }
+
+  public async getWorldCupAwardsById(id: string, lang?: string): Promise <WorldCupAwardsByIdApiResponse>{
+    return this.getEndpointData<WorldCupAwardsByIdApiResponse>(`/world-cup/${id}/awards`,{
+      lang: this.resolveLang(lang),
+    })
   /**
    * feature 10 jugar la final
    * 
