@@ -1,20 +1,23 @@
-import { Controller, Get, HttpStatus, HttpCode } from '@nestjs/common';
+import { Controller, Get, HttpStatus, HttpCode, Query } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CoachingService } from '../services/coaching.service';
+import { AbstractController } from 'src/basic/abstract.controller';
 
-@ApiTags('my-team') // Teoría de Configuración: Agrupa tu endpoint en la interfaz visual de Swagger
-@Controller('my-team') // Recurso base (Sustantivo de jerarquía superior según REST)
-export class CoachingController {
+@ApiTags('my-team') 
+@Controller('my-team') 
+export class CoachingController extends AbstractController {
   
-  // Inyección de dependencias: Recibimos el servicio que configuramos recién
-  constructor(private readonly coachingService: CoachingService) {}
+  constructor(private readonly coachingService: CoachingService) {
+    super();
+  }
 
-  // Contrato REST: Método HTTP GET para leer el recurso subordinado 'coaching'
-  // URL Final: http://localhost:4101/worldCupCore/my-team/coaching
   @Get('coaching')
-  @HttpCode(HttpStatus.OK) // Código de Estado REST: Forzamos la respuesta estándar 200 OK
-  async getCoaching() {
-    // JavaScript Asincrónico: Esperamos la respuesta del servicio y la devolvemos
-    return await this.coachingService.getCoachInfo();
+  @HttpCode(HttpStatus.OK) 
+  async getCoaching(
+    @Query('teamId') teamId: string, 
+    @Query('lang') lang: string = 'es' 
+  ) {
+    
+    return await this.coachingService.getCoachingOverview(teamId, lang);
   }
 }

@@ -1,29 +1,24 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
+import { CoachingService } from './service/coaching.service'; 
+import { CoachingViewModel } from './model/coaching-view-model.interface'; 
+import { AppModule } from 'src/app/app.module';
 
 @Component({
-  selector: 'app-coaching-page',
-  standalone: false,
+  selector: 'app-coaching',
   templateUrl: './coaching.component.html',
-  styleUrls: ['./coaching.component.css'],
+  styleUrls: ['./coaching.component.scss']
 })
 export class CoachingComponent implements OnInit {
-  isLoading = true;
-  coachName = 'Cargando entrenador...';
-  trainingPlan = 'Cargando plan de entrenamiento...';
+  private readonly coachingService = inject(CoachingService);
+
+  constructor() {}
 
   ngOnInit(): void {
-    throw new Error('Method not implemented.');
+    this.coachingService.initialize();
   }
-}
 
 
- /* private initializeCoachingData(): void {
-    // Simulate loading data from an API or service.
-    setTimeout(() => {
-      this.coachName = 'Director Técnico';
-      this.trainingPlan = 'Plan de entrenamiento táctico y físico listo para el próximo partido.';
-      this.isLoading = false;
-    }, 500);
+  getviewModel(): CoachingViewModel {
+    return this.coachingService.getviewModel();
   }
 }
-*/
