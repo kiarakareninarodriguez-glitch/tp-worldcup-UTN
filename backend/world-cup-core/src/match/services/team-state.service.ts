@@ -3,14 +3,13 @@ import { AdminService } from 'src/admin/admin.service';
 import { AbstractBaseService } from 'src/basic/abstract-base.service';
 import { WorldCupFeatureApiService } from 'src/basic/world-cup-feature-api.service';
 import { LanguageEnum } from 'src/basic/model/language.enum';
-import { MatchTeamSquad } from './model/api/match-team-squad.model';
-import { MatchSquadPlayer } from './model/api/match-squad-player.model';
+
 import { ApiErrorMappingRule, ApiErrorStatusMap, ErrorUtils } from 'src/basic/error/error.utils';
 import { WorldCupCoreErrorCode } from 'src/basic/model/world-cup-core-error-code.enum';
-import { MatchStrategyLabels } from './model/api/match-strategy.enum';
 import { POSITIONS } from './helpers/reference.service';
-import { MatchSquadResponse } from './model/api/match-squad-response.model';
 import { TeamStateApiResponse, TeamStatePlayerApiItem, TeamStateTeamApiItem } from './model/view/team-state-api.interface';
+import { MatchCurrentSquadItem, MatchCurrentSquadItemPlayer, MatchCurrentSquadResponse } from './model/api/match-current-quad-response.model';
+import { MatchStrategyLabels } from './model/api/match-strategy.enum';
 
 
 const TEAM_STATE_API_ERROR_STATUS_MAP: ApiErrorStatusMap = {
@@ -48,7 +47,7 @@ export class TeamStateService extends AbstractBaseService {
 
       const teamId = this.getCurrentTeamId();
       const resolvedLang = this.resolveLang(lang);
-      const teamState: MatchSquadResponse = await this.worldCupFeatureApiService.getMatchCurrentSquad(resolvedLang);
+      const teamState: MatchCurrentSquadResponse = await this.worldCupFeatureApiService.getMatchCurrentSquad(resolvedLang);
 
       return this.buildTeamStatenScreen(teamState, resolvedLang);
     } catch (error) {
@@ -61,7 +60,7 @@ export class TeamStateService extends AbstractBaseService {
   }
 
   private async buildTeamStatenScreen(
-    teamState: MatchSquadResponse,
+    teamState: MatchCurrentSquadResponse,
     lang: LanguageEnum,
   ): Promise<TeamStateApiResponse> {
 
@@ -79,7 +78,7 @@ export class TeamStateService extends AbstractBaseService {
     } as TeamStateApiResponse;
   }
 
-  private buildTeamStateItem(teamData: MatchTeamSquad, lang: LanguageEnum,): TeamStateTeamApiItem {
+  private buildTeamStateItem(teamData: MatchCurrentSquadItem, lang: LanguageEnum,): TeamStateTeamApiItem {
 
     return {
       id: teamData.id,
@@ -104,7 +103,7 @@ export class TeamStateService extends AbstractBaseService {
     }
 
   }
-  private buildTeamStatePlayerItemArray(teamStatePlayerItem: MatchSquadPlayer[], lang: LanguageEnum,): TeamStatePlayerApiItem[] {
+  private buildTeamStatePlayerItemArray(teamStatePlayerItem: MatchCurrentSquadItemPlayer[], lang: LanguageEnum,): TeamStatePlayerApiItem[] {
 
     const players: TeamStatePlayerApiItem[] = teamStatePlayerItem.map((player) => ({
       playerId: player.playerId,

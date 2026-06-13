@@ -1,6 +1,97 @@
 <section class="card">
   <div class="card-header">
-    <span class="card-title">Fase de grupos</span>
+    <span class="card-title">Fase de Grupos</span>
+    <span class="badge badge-primary">{{ pageState.selectedTeamLabel }}</span>
   </div>
-  <p>Este componente debe ser desarrollado por el alumno.</p>
+
+  <!-- ESTADO 1: Cargando -->
+  <div class="empty-state" *ngIf="pageState.loading">
+    <div class="empty-icon">⏳</div>
+    <p>Cargando grupos...</p>
+  </div>
+
+  <!-- ESTADO 2: Error -->
+  <div class="empty-state" *ngIf="!pageState.loading && pageState.errorMessage">
+    <div class="empty-icon">⚠️</div>
+    <p>{{ pageState.errorMessage }}</p>
+  </div>
+
+  <!-- ESTADO 3: Sin simulación -->
+  <div class="empty-state" *ngIf="!pageState.loading && !pageState.errorMessage && pageState.showNoSimulationState">
+    <div class="empty-icon">🌍</div>
+    <p>Todavía no hay un mundial simulado. Primero simulá el mundial desde <strong>Simular Final</strong>.</p>
+  </div>
+
+  <!-- ESTADO 4: Datos disponibles -->
+  <ng-container *ngIf="!pageState.loading && !pageState.errorMessage && !pageState.showNoSimulationState && pageState.groups.length > 0">
+
+    <!-- Tabs de grupos -->
+    <nav class="group-tabs mt-16">
+      <button
+        *ngFor="let group of pageState.groups"
+        class="group-tab"
+        [class.group-tab-active]="group.group === pageState.selectedGroup"
+        (click)="onSelectGroup(group.group)">
+        Grupo {{ group.group }}
+      </button>
+    </nav>
+
+    <!-- Tabla del grupo seleccionado -->
+    <ng-container *ngIf="pageState.selectedGroupData as group">
+
+      <section class="table-wrap mt-16">
+        <table>
+          <thead>
+            <tr>
+              <th>Pos.</th>
+              <th>Equipo</th>
+              <th>Conf.</th>
+              <th>PJ</th>
+              <th>G</th>
+              <th>E</th>
+              <th>P</th>
+              <th>GF</th>
+              <th>GC</th>
+              <th>DG</th>
+              <th>Pts</th>
+              <th>Clas.</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let team of group.teams"
+              [class.user-team-row]="team.isSelectedTeam">
+              <td>{{ team.position }}</td>
+              <td>
+                {{ team.teamName }}
+                <span *ngIf="team.isSelectedTeam" class="user-team-badge">★</span>
+              </td>
+              <td>{{ team.confederation }}</td>
+              <td>{{ team.played }}</td>
+              <td>{{ team.wins }}</td>
+              <td>{{ team.draws }}</td>
+              <td>{{ team.losses }}</td>
+              <td>{{ team.goalsFor }}</td>
+              <td>{{ team.goalsAgainst }}</td>
+              <td>{{ team.goalDifferenceLabel }}</td>
+              <td><strong>{{ team.points }}</strong></td>
+              <td>
+                <span *ngIf="team.qualificationBadge === 'QUALIFIED'"
+                  class="qualification-mark qualification-mark-qualified">✓</span>
+                <span *ngIf="team.qualificationBadge === 'BEST_THIRD'"
+                  class="qualification-mark qualification-mark-best-third">✓</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- Leyenda -->
+      <div class="groups-legend mt-12">
+        <span class="groups-legend-main">✓ Verde: 1ro y 2do clasifican directo</span>
+        <span class="groups-legend-best-third">✓ Azul: mejor tercero</span>
+      </div>
+
+    </ng-container>
+  </ng-container>
 </section>

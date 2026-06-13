@@ -31,3 +31,14 @@
   white-space: nowrap;
   border: 0;
 }
+.team-card-data{
+  max-width: 45%;
+  width: 45%;
+  
+}
+
+.list-data {
+  list-style: none;    
+  padding: 0;        
+  margin: 0;  
+}
