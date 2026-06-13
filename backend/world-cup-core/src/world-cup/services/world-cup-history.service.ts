@@ -4,9 +4,25 @@ import { AbstractBaseService } from "src/basic/abstract-base.service";
 import { WorldCupFeatureApiService } from "src/basic/world-cup-feature-api.service";
 import { WorldCupHistoryItemModel, WorldCupHistoryScreenModel } from "./model/world-cup-history-service.model";
 import { WorldCupByIdApiResponse, WorldCupStatsByIdApiResponse } from "./model/world-cup-history-service.interface";
-import { ErrorUtils } from "src/basic/error/error.utils";
+import { ApiErrorMappingRule, ApiErrorStatusMap, ErrorUtils } from "src/basic/error/error.utils";
 import { WorldCupCoreErrorCode } from "src/basic/model/world-cup-core-error-code.enum";
 
+const WORLD_CUP_HISTORY_API_ERROR_STATUS_MAP: ApiErrorStatusMap = {
+  [HttpStatus.NOT_FOUND]: {
+    messageCode: WorldCupCoreErrorCode.WC_WORLD_CUP_HISTORY_UNAVAILABLE,
+    message: 'World cup history was not found.',
+  },
+  [HttpStatus.CONFLICT]: {
+    messageCode: WorldCupCoreErrorCode.WC_WORLD_CUP_HISTORY_UNAVAILABLE,
+    message: 'World cup history is not available right now. Try again in a moment.',
+  },
+};
+
+const WORLD_CUP_HISTORY_API_ERROR_FALLBACK: ApiErrorMappingRule = {
+  messageCode: WorldCupCoreErrorCode.WC_WORLD_CUP_HISTORY_FETCH_FAILED,
+  message: 'Unable to load world cup history from World Cup API.',
+  statusCode: HttpStatus.BAD_GATEWAY,
+};
 
 @Injectable()
 export class WorldCupHistoryService extends AbstractBaseService {
@@ -37,15 +53,11 @@ export class WorldCupHistoryService extends AbstractBaseService {
       totalWorldCups: historyItems.length,
       worldCups: historyItems,
     });
-  } catch (error) {
-    ErrorUtils.mapWorldCupApiError(
+ } catch (error) {
+  ErrorUtils.mapWorldCupApiError(
     error,
-    {},
-    {
-      messageCode: WorldCupCoreErrorCode.WC_SIMULATION_FETCH_FAILED,
-      message: 'No se pudo cargar el historial de mundiales.',
-      statusCode: HttpStatus.BAD_GATEWAY,
-    }
+    WORLD_CUP_HISTORY_API_ERROR_STATUS_MAP,
+    WORLD_CUP_HISTORY_API_ERROR_FALLBACK,
   );
   }
 }
