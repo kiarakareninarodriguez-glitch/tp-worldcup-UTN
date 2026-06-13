@@ -49,7 +49,7 @@ export class AppComponent implements OnInit {
     'route.worldCup.stats.title': 'Estadísticas y premios',
     'route.worldCup.stats.subtitle': 'Pendiente de desarrollo por el alumno',
     'route.worldCup.history.title': 'Historial de mundiales',
-    'route.worldCup.history.subtitle': 'Pendiente de desarrollo por el alumno',
+    'route.worldCup.history.subtitle': 'Podio, estadisticas y premios de los mundiales jugados',
     'route.final.live.title': 'Eventos en vivo',
     'route.final.live.subtitle': 'Pendiente de desarrollo por el alumno',
     'route.final.teamState.title': 'Estado del equipo',
