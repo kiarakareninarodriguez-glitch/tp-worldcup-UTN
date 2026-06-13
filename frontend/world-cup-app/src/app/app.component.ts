@@ -55,7 +55,7 @@ export class AppComponent implements OnInit {
     'route.final.teamState.title': 'Estado del equipo',
     'route.final.teamState.subtitle': 'Estado de los equipos en la final',
     'route.final.chat.title': 'Jugar la final',
-    'route.final.chat.subtitle': 'Pendiente de desarrollo por el alumno',
+    'route.final.chat.subtitle': 'juega con el equipo usando el chat',
     'route.fallback.title': 'World Cup 2026',
     'route.fallback.subtitle': 'Aplicación del trabajo práctico',
   };

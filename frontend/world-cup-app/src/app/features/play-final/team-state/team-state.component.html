@@ -18,82 +18,111 @@
 
   <ng-container
     *ngIf="!pageState.loading && !pageState.errorMessage && !pageState.showNoFinalState  && pageState.data as data">
-    {{data?.team?.name}} vs {{data?.opponent?.name}}
     <div class="team-state-actions-row">
       <div class="team-state-status-row">
-        <span class="badge badge-gray">turno {{data.turn}}</span>
-        <span class="badge badge-green">minuto {{data.minute}}</span>
+        <span class="badge badge-green">turno {{data.turn}}</span>
+        <span class="badge badge-green">minuto {{data.minute}}'</span>
         <span class="badge badge-green">marcador {{data.score}}</span>
       </div>
 
 
-      <form class="team-state-actions-controls" (submit)="$event.preventDefault()">
-        <label class="visually-hidden-label" for="team-state-reteam-state-button">Re-simular Mundial</label>
-        <button id="team-state-reteam-state-button" type="button" class="btn btn-ghost">
-          <span>refrescar</span>
-        </button>
-      </form>
     </div>
 
     <div class="vs-container">
-
-      <article class="team-card" style="max-width: 45%;">
-
-
-        <ul>
-          <li> {{data?.team?.flag}} </li>
-          <li>nombre : {{data?.team?.name}}</li>
+      <div class="team-card team-card-data">
+        <ul class="list-data">
+          <li class="tc-flag"> {{data?.team?.flag}} </li>
+          <li>{{data?.team?.name}}</li>
           <li>formacion : {{data?.team?.formation}}</li>
           <li>entrenador : {{data?.team?.coachName}}</li>
           <li>perfil : {{data?.team?.coachProfile}}</li>
-          <li>tacticas [ ataque: {{data?.team?.tactical?.attack}} ] [ defensa: {{data?.team?.tactical?.defense}} ] [
-            mediocampo: {{data?.team?.tactical?.midfield}} ]</li>
-          <li>jugadores en cancha</li>
-          <li></li>
+          <li>ataque: {{data?.team?.tactical?.attack}} </li>
+          <li>defensa: {{data?.team?.tactical?.defense}} </li>
+          <li> mediocampo: {{data?.team?.tactical?.midfield}} </li>
         </ul>
-        <ul *ngIf="pageState.data.team.onField.length > 0">EN CANCHA
-          <li class="card" *ngFor="let player of pageState.data.team.onField" title="{{player.name}}">
-            {{player.displayName}} - camiseta {{player.shirtNumber}} - posicion: {{player.position}}- energia:
-            {{player.energy}}</li>
-          <li></li>
 
-        </ul>
-        sustituciones disponibles {{data?.team?.remainingSubstitutions}} : USADAS :{{data?.team?.substitutionsUsed}}
-        <ul  *ngIf="pageState.data.team.onField.length > 0">EN BANCA
-          <li  class="card" *ngFor="let player of pageState.data.team.bench" title="{{player.name}}">
-            {{player.displayName}} - camiseta {{player.shirtNumber}} - posicion: {{player.position}}- energia:
-            {{player.energy}}</li>
-        </ul>
-      </article>
+      </div>
+
       <div class="vs-divider">VS</div>
-
-      <article class="team-card" style="max-width: 45%;">
-
-
-        <ul>
-          <li> {{data?.opponent?.flag}} </li>
-          <li>nombre : {{data?.opponent?.name}}</li>
+      <div class="team-card team-card-data">
+        <ul class="list-data">
+          <li class="tc-flag"> {{data?.opponent?.flag}} </li>
+          <li>{{data?.opponent?.name}}</li>
           <li>formacion : {{data?.opponent?.formation}}</li>
           <li>entrenador : {{data?.opponent?.coachName}}</li>
           <li>perfil : {{data?.opponent?.coachProfile}}</li>
-          <li>tacticas [ ataque: {{data?.opponent?.tactical?.attack}} ] [ defensa: {{data?.opponent?.tactical?.defense}} ] [
-            mediocampo: {{data?.opponent?.tactical?.midfield}} ]</li>
-          <li>jugadores en cancha</li>
-          <li></li>
-        </ul>
-        <ul *ngIf="pageState.data.opponent.onField.length > 0">EN CANCHA
-          <li class="card" *ngFor="let player of pageState.data.opponent.onField" title="{{player.name}}">
-            {{player.displayName}} - camiseta {{player.shirtNumber}} - posicion: {{player.position}}- energia:
-            {{player.energy}}</li>
-          <li></li>
+          <li>ataque: {{data?.opponent?.tactical?.attack}}</li>
+          <li>defensa: {{data?.opponent?.tactical?.defense}}</li>
+          <li>mediocampo: {{data?.opponent?.tactical?.midfield}} </li>
 
         </ul>
-        sustituciones disponibles {{data?.opponent?.remainingSubstitutions}} : USADAS :{{data?.opponent?.substitutionsUsed}}
-        <ul *ngIf="pageState.data.opponent.onField.length > 0">EN BANCA
-          <li class="card" *ngFor="let player of pageState.data.opponent.bench" title="{{player.name}}">
-            {{player.displayName}} - camiseta {{player.shirtNumber}} - posicion: {{player.position}}- energia:
-            {{player.energy}}
-          </li>
+      </div>
+
+    </div>
+    <div class="vs-container">
+
+      <article class="team-card-data">
+
+        <div *ngIf="pageState.data.team.onField.length > 0">
+          <div class="squad-section-lbl">Titulares</div>
+          <div class="player-rows">
+            <div class="pr" *ngFor="let player of pageState.data.team.onField">
+              <span class="pr-shirt">{{player.shirtNumber}}</span>
+              <span class="pr-name" title="{{player.name}}" >{{player.displayName}} </span>
+              <span class="pr-name">{{player.position}} </span>
+
+              <span class="pr-energy" title="{{player.energyLabel}}" >🔋 {{player.energy}}% </span>
+              <span class="pr-energy" title="{{player.energyLabel}}" >{{player.energyLabel}}</span>
+            </div>
+          </div>
+
+        </div>
+        <div *ngIf="pageState.data.team.onField.length > 0">
+          <div class="squad-section-lbl">Suplentes</div>
+          <p>sustituciones realizadas {{data?.team?.substitutionsUsed}} de {{data?.team?.remainingSubstitutions}}</p>
+          <div class="player-rows">
+            <div class="pr" *ngFor="let player of pageState.data.team.bench" >
+              <span class="pr-shirt">{{player.shirtNumber}}</span>
+              <span class="pr-name" title="{{player.name}}" >{{player.displayName}} </span>
+              <span class="pr-name">{{player.position}} </span>
+              <span class="pr-energy" title="{{player.energyLabel}}" >🔋 {{player.energy}}% </span>
+              <span class="pr-energy" title="{{player.energyLabel}}" >{{player.energyLabel}}</span>
+            </div>
+          </div>
+        </div>
+      </article>
+      <div class="vs-divider">VS</div>
+
+      <article class="team-card-data">
+
+
+
+        <ul *ngIf="pageState.data.opponent.onField.length > 0">
+          <div class="squad-section-lbl">Titulares</div>
+          <div class="player-rows">
+            <div class="pr" *ngFor="let player of pageState.data.opponent.onField" >
+              <span class="pr-shirt">{{player.shirtNumber}}</span>
+              <span class="pr-name" title="{{player.name}}" >{{player.displayName}} </span>
+              <span class="pr-name">{{player.position}} </span>
+              <span class="pr-energy" title="{{player.energyLabel}}" >🔋 {{player.energy}}% </span>
+              <span class="pr-energy" title="{{player.energyLabel}}" >{{player.energyLabel}}</span> 
+            </div>
+          </div>
+
+        </ul>
+        <ul *ngIf="pageState.data.opponent.onField.length > 0">
+          <div class="squad-section-lbl">Suplentes</div>
+          <p>sustituciones realizadas {{data?.opponent?.substitutionsUsed}} de {{data?.opponent?.remainingSubstitutions}}</p>
+
+          <div class="player-rows">
+            <div class="pr" *ngFor="let player of pageState.data.opponent.onField" >
+              <span class="pr-shirt">{{player.shirtNumber}}</span>
+              <span class="pr-name" title="{{player.name}}" >{{player.displayName}} </span>
+              <span class="pr-name">{{player.position}} </span>
+              <span class="pr-energy" title="{{player.energyLabel}}" >🔋 {{player.energy}}% </span>
+              <span class="pr-energy" title="{{player.energyLabel}}" >{{player.energyLabel}}</span> 
+            </div>
+          </div>
         </ul>
       </article>
     </div>
