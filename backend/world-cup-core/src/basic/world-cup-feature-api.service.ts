@@ -11,7 +11,6 @@ import type {
   TeamCatalogApiItem,
   TeamStatsApiResponse,
 } from '../world-cup/services/model/simulation-service.interface';
-import { MatchSquadResponse } from 'src/match/services/model/api/match-squad-response.model';
 import { WorldCupByIdApiResponse, WorldCupStatsByIdApiResponse, WorldCupAwardsByIdApiResponse } from 'src/world-cup/services/model/world-cup-history-service.interface';
 import { MatchStartFinalResponse, SelectStrategyResponse } from 'src/match/services/model/api/match-start-final-response.model';
 import { MatchCurrentSquadResponse } from 'src/match/services/model/api/match-current-quad-response.model';
@@ -120,6 +119,7 @@ export class WorldCupFeatureApiService extends AbstractBaseService {
     return this.getEndpointData<WorldCupAwardsByIdApiResponse>(`/world-cup/${id}/awards`,{
       lang: this.resolveLang(lang),
     })
+  }
   /**
    * feature 10 jugar la final
    * 
@@ -132,6 +132,7 @@ export class WorldCupFeatureApiService extends AbstractBaseService {
     crear POST /match/select-formation - Para cambiar la formación durante el partido
    * 
    */
+
   public async getStrategiesMatch(lang?: string): Promise<MatchStrategiesResponse[]> {
     return this.getEndpointData<MatchStrategiesResponse[]>('/match/strategies', {
       lang: this.resolveLang(lang),
