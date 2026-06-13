@@ -1,7 +1,11 @@
 export class WorldCupHistoryItemModel {
   public worldCupId: string;
-  public edition: number;
+  public worldCupIdShort: string;
   public finalPlayedAt: string | null;
+  public edition: number;
+  public editionLabel: string;
+  public status: string;
+  public statusLabel: string;
   public champion: { teamId: string; teamName: string };
   public runnerUp: { teamId: string; teamName: string };
   public thirdPlace: { teamId: string; teamName: string };
@@ -13,11 +17,12 @@ export class WorldCupHistoryItemModel {
   public redCards: number;
   public topScorer: { playerName: string; teamId: string; teamName: string; value: number };
   public topAssist: { playerName: string; teamId: string; teamName: string; value: number };
-
+  public fairPlay: { teamId: string; teamName: string; teamFlag: string; fairPlayPoints: number; yellowCards: number; redCards: number; fairPlayRank: number; totalRankedTeams: number; hasData: boolean };
   constructor(data: {
     worldCupId: string;
     edition: number;
     finalPlayedAt: string | null;
+    status: string;
     champion: { teamId: string; teamName: string };
     runnerUp: { teamId: string; teamName: string };
     thirdPlace: { teamId: string; teamName: string };
@@ -29,10 +34,15 @@ export class WorldCupHistoryItemModel {
     redCards: number;
     topScorer: { playerName: string; teamId: string; teamName: string; value: number };
     topAssist: { playerName: string; teamId: string; teamName: string; value: number };
+    fairPlay: { teamId: string; teamName: string; teamFlag: string; fairPlayPoints: number; yellowCards: number; redCards: number; fairPlayRank: number; totalRankedTeams: number; hasData: boolean };
   }) {
     this.worldCupId = data.worldCupId;
+    this.worldCupIdShort = data.worldCupId.slice(-8);
     this.edition = data.edition;
+    this.editionLabel = `Edición ${data.edition}`;
     this.finalPlayedAt = data.finalPlayedAt;
+    this.status = data.status;
+    this.statusLabel = data.status === 'ENDED' ? 'Finalizado' : data.status;
     this.champion = data.champion;
     this.runnerUp = data.runnerUp;
     this.thirdPlace = data.thirdPlace;
@@ -44,6 +54,7 @@ export class WorldCupHistoryItemModel {
     this.redCards = data.redCards;
     this.topScorer = data.topScorer;
     this.topAssist = data.topAssist;
+    this.fairPlay = data.fairPlay;
   }
 }
 

@@ -3,7 +3,7 @@ import { AdminService } from "src/admin/admin.service";
 import { AbstractBaseService } from "src/basic/abstract-base.service";
 import { WorldCupFeatureApiService } from "src/basic/world-cup-feature-api.service";
 import { WorldCupHistoryItemModel, WorldCupHistoryScreenModel } from "./model/world-cup-history-service.model";
-import { WorldCupByIdApiResponse, WorldCupStatsByIdApiResponse } from "./model/world-cup-history-service.interface";
+import { WorldCupAwardsByIdApiResponse, WorldCupByIdApiResponse, WorldCupStatsByIdApiResponse } from "./model/world-cup-history-service.interface";
 import { ApiErrorMappingRule, ApiErrorStatusMap, ErrorUtils } from "src/basic/error/error.utils";
 import { WorldCupCoreErrorCode } from "src/basic/model/world-cup-core-error-code.enum";
 
@@ -37,14 +37,16 @@ export class WorldCupHistoryService extends AbstractBaseService {
   try {
     const worldCupIds: string[] = await this.worldCupFeatureApiService.getWorldCupHistory();
     const historyItems: WorldCupHistoryItemModel[] = [];
+    
 
     for (const worldCupId of worldCupIds) {
       const worldCup = await this.worldCupFeatureApiService.getWorldCupById(worldCupId);
 
       if (worldCup.status === 'ENDED') {
-        const stats = await this.worldCupFeatureApiService.getWorldCupStatsById(worldCupId);
-        const historyItem = this.buildHistoryItem(worldCup, stats);
-        historyItems.push(historyItem);
+  const stats = await this.worldCupFeatureApiService.getWorldCupStatsById(worldCupId);
+  const awards = await this.worldCupFeatureApiService.getWorldCupAwardsById(worldCupId);
+  const historyItem = this.buildHistoryItem(worldCup, stats, awards);
+  historyItems.push(historyItem);
       }
     }
     return new WorldCupHistoryScreenModel({
@@ -59,17 +61,37 @@ export class WorldCupHistoryService extends AbstractBaseService {
     WORLD_CUP_HISTORY_API_ERROR_STATUS_MAP,
     WORLD_CUP_HISTORY_API_ERROR_FALLBACK,
   );
-  }
 }
- private buildHistoryItem(worldCup: WorldCupByIdApiResponse, stats : WorldCupStatsByIdApiResponse): WorldCupHistoryItemModel{
+}
+ private buildHistoryItem(
+  worldCup: WorldCupByIdApiResponse, 
+  stats: WorldCupStatsByIdApiResponse,
+  awards: WorldCupAwardsByIdApiResponse
+): WorldCupHistoryItemModel{
+  const fairPlayAward = awards.find(award => award.code === 'FAIR_PLAY');
+  // FALTA EQUIPO CON PEOR FAIR PLAY!!
    return new WorldCupHistoryItemModel({
-     worldCupId: worldCup.worldCupId,
+     worldCupId: worldCup.worldCupId, 
+     finalPlayedAt: worldCup.updatedAt || null,
       edition: worldCup.edition,
-      finalPlayedAt: worldCup.updatedAt || null,
+      status: worldCup.status,
       champion: stats.champion ? { teamId: stats.champion.teamId, teamName: stats.champion.teamName } : { teamId: '', teamName: '' },
       runnerUp: stats.runnerUp ? { teamId: stats.runnerUp.teamId, teamName: stats.runnerUp.teamName } : { teamId: '', teamName: '' },
       thirdPlace: stats.thirdPlace ? { teamId: stats.thirdPlace.teamId, teamName: stats.thirdPlace.teamName } : { teamId: '', teamName: '' },
       fourthPlace: stats.fourthPlace ? { teamId: stats.fourthPlace.teamId, teamName: stats.fourthPlace.teamName } : { teamId: '', teamName: '' },
+     fairPlay: fairPlayAward 
+  ? { 
+      teamId: fairPlayAward.teamId ?? '',
+      teamName: fairPlayAward.teamName ?? '',
+      teamFlag: '',
+      fairPlayPoints: fairPlayAward.fairPlayPoints ?? 0,
+      yellowCards: fairPlayAward.yellowCards ?? 0,
+      redCards: fairPlayAward.redCards ?? 0,
+      fairPlayRank: 1,
+      totalRankedTeams: 0,
+      hasData: true
+    } 
+  : { teamId: '', teamName: '', teamFlag: '', fairPlayPoints: 0, yellowCards: 0, redCards: 0, fairPlayRank: 0, totalRankedTeams: 0, hasData: false },
       totalMatches: stats.totalMatches || 0,
       totalGoals: stats.totalGoals || 0,
       avgGoalsPerMatch: stats.avgGoalsPerMatch || 0,
