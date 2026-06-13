@@ -32,6 +32,12 @@ export class WorldCupFeatureApiService extends AbstractBaseService {
     super(adminService, worldCupApiService);
   }
 
+  public async getCoach(teamId: string, lang?: string): Promise<any> {
+    return this.getEndpointData<any>(`/teams/coaches`, {
+      teamId,
+    });
+  }
+
   public getCurrentTeamId(): string {
     return super.getCurrentTeamId();
   }

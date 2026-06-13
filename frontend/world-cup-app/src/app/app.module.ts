@@ -9,7 +9,7 @@ import { SidebarComponent } from './shared/sidebar/sidebar.component';
 import { AppHeaderComponent } from './shared/layout/app-header.component';
 import { TopbarComponent } from './shared/layout/topbar.component';
 import { SquadPageComponent } from './features/my-team/squad/squad.component';
-import { CoachingPageComponent } from './features/my-team/coaching/coaching.component';
+import { CoachingComponent } from './features/my-team/coaching/coaching.component';
 import { TeamHistoryPageComponent } from './features/my-team/team-history/team-history.component';
 import { RivalsPageComponent } from './features/my-team/rivals/rivals.component';
 import { GroupsPageComponent } from './features/world-cup/groups/groups.component';
@@ -29,7 +29,7 @@ import { FinalChatPageComponent } from './features/play-final/final-chat/final-c
     AppHeaderComponent,
     TopbarComponent,
     SquadPageComponent,
-    CoachingPageComponent,
+    CoachingComponent,
     TeamHistoryPageComponent,
     RivalsPageComponent,
     GroupsPageComponent,
