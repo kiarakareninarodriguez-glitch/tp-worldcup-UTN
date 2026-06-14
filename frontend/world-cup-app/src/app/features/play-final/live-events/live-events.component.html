@@ -1,21 +1,37 @@
-<div style="padding: 20px;">
-  <h2>Eventos en Vivo - La Final</h2>
+<section class="twc-card">
 
-  <div *ngIf="eventos.length > 0; else loading">
-    <h3>Partidos en vivo</h3>
-
-    <div *ngFor="let partido of eventos" style="margin-bottom: 15px;">
-      <p>
-        <strong>{{ partido.homeTeam }}</strong> vs <strong>{{ partido.awayTeam }}</strong>
-      </p>
-      <p>
-        Estado: {{ partido.status }} | Minuto: {{ partido.minute }}
-      </p>
-      <hr>
-    </div>
+  <div class="twc-card__header">
+    <span class="twc-card__title">Eventos en vivo</span>
   </div>
 
-  <ng-template #loading>
-    <p>Cargando datos del partido en vivo...</p>
-  </ng-template>
-</div>
+  <div class="twc-card__body">
+
+    <!-- Loading -->
+    <p *ngIf="vm.loading">Cargando...</p>
+
+    <!-- Error -->
+    <p *ngIf="vm.errorMessage">{{ vm.errorMessage }}</p>
+
+    <!-- DATA -->
+    <div *ngIf="vm.data">
+
+      <h3>
+        {{ vm.data.team.name }} vs {{ vm.data.opponent.name }}
+      </h3>
+
+      <p>Resultado: {{ vm.data.score }}</p>
+      <p>Minuto: {{ vm.data.minute }}</p>
+
+      <hr>
+
+      <div *ngFor="let ev of vm.data.events">
+        <p>
+          <strong>{{ ev.minute }}'</strong> - {{ ev.message }}
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>

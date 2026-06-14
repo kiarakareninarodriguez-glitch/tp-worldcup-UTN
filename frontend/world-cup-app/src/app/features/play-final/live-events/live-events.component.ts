@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { LiveEventsService } from './live-events.service';
+import { LiveEventsService } from './service/live-events.service';
+import { LiveEventsViewModel } from './model/live-events-view-model.interface';
 
 @Component({
   selector: 'app-live-events-page',
@@ -8,17 +9,25 @@ import { LiveEventsService } from './live-events.service';
 })
 export class LiveEventsPageComponent implements OnInit {
 
-  eventos: any[] = [];
+  vm: LiveEventsViewModel = {
+    lang: 'es',
+    loading: true,
+    errorMessage: '',
+    showNoFinalState: false,
+    data: null
+  };
 
   constructor(private liveEventsService: LiveEventsService) {}
 
   ngOnInit(): void {
     this.liveEventsService.getLiveEvents().subscribe({
-      next: (data: any[]) => {
-        this.eventos = data;
+      next: (resp: any) => {
+        this.vm.data = resp.data;
+        this.vm.loading = false;
       },
-      error: (err: any) => {
-        console.error('Error en la consola:', err);
+      error: () => {
+        this.vm.errorMessage = 'Error cargando eventos';
+        this.vm.loading = false;
       }
     });
   }

@@ -1,17 +1,16 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Injectable } from '@nestjs/common';
+import { WorldCupFeatureApiService } from '../basic/world-cup-feature-api.service';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class LiveEventsService {
 
-  private apiUrl = 'http://localhost:4101/worldCupCore/final-match/live-events';
+  constructor(
+    private readonly worldCupFeatureApiService: WorldCupFeatureApiService
+  ) {}
 
-  constructor(private http: HttpClient) {}
-
-  getLiveEvents(): Observable<any[]> {
-    return this.http.get<any[]>(this.apiUrl);
+  async getLiveEvents(): Promise<any> {
+    return this.worldCupFeatureApiService.getEndpointData(
+      '/match/current/stats'
+    );
   }
 }
