@@ -34,6 +34,10 @@
       <li *ngFor="let rival of pageState.rivals">
         <article class="rival-card">
           <header class="rival-card-header">
+            <div class="rival-flag">
+               {{ getFlag(rival.id) }}
+            </div>
+
             <span class="rival-code">{{ rival.id | uppercase }}</span>
             <h2>{{ rival.name }}</h2>
           </header>

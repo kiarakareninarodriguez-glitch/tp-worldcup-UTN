@@ -1,6 +1,7 @@
 export interface RivalItem {
   id: string;
   name: string;
+  flagEmoji: string;
   confederation: string;
   overallRating: number;
   coachName: string;
