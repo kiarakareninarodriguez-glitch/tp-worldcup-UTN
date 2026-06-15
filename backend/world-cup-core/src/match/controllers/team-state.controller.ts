@@ -7,13 +7,11 @@ import { TeamStateQueryRequest } from './request/team-state-query.request';
 @ApiTags('final-match')
 @Controller('final-match')
 export class TeamStateController extends AbstractController {
-  // TODO: Se debe implementar el controlador y el servicio correspondiente.
 
     constructor(private readonly teamStateService: TeamStateService) {
       super();
     }
 
-      /** Returns title team state. */
       @Get('/team-state')
       @ApiOperation({ summary: 'final-match - Team status component' })
       @ApiQuery({ name: 'lang', required: false, enum: ['es', 'en'] })
