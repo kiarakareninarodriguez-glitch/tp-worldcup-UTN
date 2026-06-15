@@ -31,10 +31,10 @@
     <section class="world-cup-podium">
       <h3 class="section-subtitle">Podio</h3>
       <ul class="podium-list">
-        <li>🥇 {{ worldCup.champion.teamName }}</li>
-        <li>🥈 {{ worldCup.runnerUp.teamName }}</li>
-        <li>🥉 {{ worldCup.thirdPlace.teamName }}</li>
-        <li>4º {{ worldCup.fourthPlace.teamName }}</li>
+        <li>🥇 {{ worldCup.champion.teamName }} {{ worldCup.champion.flag }}</li>
+        <li>🥈 {{ worldCup.runnerUp.teamName }} {{ worldCup.runnerUp.flag }}</li>
+        <li>🥉 {{ worldCup.thirdPlace.teamName }} {{ worldCup.thirdPlace.flag }}</li>
+        <li>4º {{ worldCup.fourthPlace.teamName }} {{ worldCup.fourthPlace.flag }}</li>
       </ul>
     </section>
 
@@ -44,8 +44,7 @@
         <li>Partidos: {{ worldCup.totalMatches }}</li>
         <li>Goles: {{ worldCup.totalGoals }}</li>
         <li>Promedio: {{ worldCup.avgGoalsPerMatch }}</li>
-        <li>🟨 {{ worldCup.yellowCards }}</li>
-        <li>🟥 {{ worldCup.redCards }}</li>
+        <li>Tarjetas: {{ worldCup.yellowCards }} 🟨  || {{ worldCup.redCards }} 🟥 </li>
       </ul>
     </section>
 
@@ -55,7 +54,7 @@
         <li>⚽ Goleador: {{ worldCup.topScorer.playerName }} ({{ worldCup.topScorer.teamName }}) - {{ worldCup.topScorer.value }}</li>
         <li>🅰️ Asistente: {{ worldCup.topAssist.playerName }} ({{ worldCup.topAssist.teamName }}) - {{ worldCup.topAssist.value }}</li>
         <li>🤝 Fair Play: {{ worldCup.fairPlay.teamName }}</li>
-        <li>👎 Peor Fair Play: </li>
+        <li>👎 Peor Fair Play: {{ worldCup.worstFairPlay.teamName }}</li>
       </ul>
     </section>
   </div>

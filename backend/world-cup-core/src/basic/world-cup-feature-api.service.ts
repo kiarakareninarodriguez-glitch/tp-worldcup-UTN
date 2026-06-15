@@ -11,7 +11,7 @@ import type {
   TeamCatalogApiItem,
   TeamStatsApiResponse,
 } from '../world-cup/services/model/simulation-service.interface';
-import { WorldCupByIdApiResponse, WorldCupStatsByIdApiResponse, WorldCupAwardsByIdApiResponse } from 'src/world-cup/services/model/world-cup-history-service.interface';
+import { WorldCupByIdApiResponse, WorldCupStatsByIdApiResponse, WorldCupAwardsByIdApiResponse, WorldCupMatchCardsApiResponse } from 'src/world-cup/services/model/world-cup-history-service.interface';
 import { MatchStartFinalResponse, SelectStrategyResponse } from 'src/match/services/model/api/match-start-final-response.model';
 import { MatchCurrentSquadResponse } from 'src/match/services/model/api/match-current-quad-response.model';
 import { MatchStrategiesResponse } from 'src/match/services/model/api/match-strategies-response.mode';
@@ -120,6 +120,10 @@ export class WorldCupFeatureApiService extends AbstractBaseService {
       lang: this.resolveLang(lang),
     })
   }
+
+  public async getWorldCupMatchCardsById(id: string): Promise<WorldCupMatchCardsApiResponse[]> {
+  return this.getEndpointData<WorldCupMatchCardsApiResponse[]>(`/world-cup/${id}/matches`, {});
+}
   /**
    * feature 10 jugar la final
    * 
