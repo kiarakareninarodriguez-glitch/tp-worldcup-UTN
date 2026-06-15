@@ -41,7 +41,7 @@ export interface CoachStatApiResponse {
 
 export interface CoachingScreenResponse {
 
-    coachA: CoachingCoach;
+    coach: CoachingCoach;
     formations: CoachFormationCatalogApiItem[];
     strategys: CoachStrategyCatalogApiItem[];
     stats: CoachStatApiResponse;

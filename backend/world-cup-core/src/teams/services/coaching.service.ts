@@ -60,7 +60,7 @@ export class CoachingService extends AbstractBaseService {
       }*/
 
       const response = {
-        coachA: {
+        coach: {
           coachId: coachData.coachId,
           teamId: coachData.teamId,
           teamName: coachData.teamName,
