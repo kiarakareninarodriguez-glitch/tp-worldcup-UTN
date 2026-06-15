@@ -1,12 +1,14 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { BaseApiService } from 'src/app/core/services/base-api.service';
 import { WorldCupHistoryViewModel } from '../model/world-cup-history-view-model.interface';
 import { catchError, Observable, map, tap, finalize, of, switchMap } from 'rxjs';
 import { WorldCupHistoryApiResponse } from '../model/world-cup-history-api.interface';
+import { UiVisualsService } from 'src/app/core/services/ui-visuals.service';
 
 
 @Injectable({ providedIn: 'root' })
 export class WorldCupHistoryService extends BaseApiService {
+    private readonly uiVisualsService = inject(UiVisualsService);
 
     private readonly pageState: WorldCupHistoryViewModel =  {
       lang: 'es',
@@ -45,7 +47,7 @@ export class WorldCupHistoryService extends BaseApiService {
 
         return this.get<WorldCupHistoryApiResponse>(('/world-cup/World-Cup-history')).pipe(
             map((response) => response.data),
-            // map((history) => this.normalizeHistory(history)), ???
+            map((history) => this.addFlagsToPodiumTeams(history)),
             tap((history) => {
                 this.pageState.showNoDataState = (history?.worldCups ?? []).length === 0;
                 this.pageState.totalWorldCups = history?.totalWorldCups ?? 0;
@@ -61,4 +63,17 @@ export class WorldCupHistoryService extends BaseApiService {
             finalize(() => (this.pageState.loading = false))
         )
     }
+
+    private addFlagsToPodiumTeams(history: WorldCupHistoryApiResponse): WorldCupHistoryApiResponse {
+    return {
+    ...history,
+    worldCups: (history.worldCups ?? []).map((worldCup) => ({
+      ...worldCup,
+      champion: { ...worldCup.champion, flag: this.uiVisualsService.getTeamFlag(worldCup.champion.teamId) },
+      runnerUp: { ...worldCup.runnerUp, flag: this.uiVisualsService.getTeamFlag(worldCup.runnerUp.teamId) },
+      thirdPlace: { ...worldCup.thirdPlace, flag: this.uiVisualsService.getTeamFlag(worldCup.thirdPlace.teamId) },
+      fourthPlace: { ...worldCup.fourthPlace, flag: this.uiVisualsService.getTeamFlag(worldCup.fourthPlace.teamId) },
+    })),
+ };
+}
 }
