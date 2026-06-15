@@ -42,15 +42,14 @@ export class FinalChatPageComponent implements OnInit {
 
   }
   seleccionarSugerencia(opcion: FinalChatOptionApiItem) {
-    this.textoInput = opcion.label; // Setea el texto en el input
-    this.sugerencias = []; // Limpiamos las sugerencias
+    this.textoInput = opcion.label;
+    this.sugerencias = [];
   }
 
   esOpcionValida(): boolean {
     const valor = this.textoInput.trim().toLowerCase();
     if (!valor) return false;
 
-    // Retorna true si lo escrito coincide con index, key o descripción
     return this.pageState?.data?.options.some(opcion =>
       opcion.index.toString() === valor ||
       opcion.action.toLowerCase() === valor ||

@@ -112,7 +112,7 @@ WORLD_CUP_API_BASE_PATH=/worldCup
 
 CORS_ALLOWED_ORIGIN=http://localhost:3101
 
-TEAM_ID=arg          # ID del equipo asignado a este grupo
+TEAM_ID=sen          # ID del equipo asignado a este grupo
 APP_LANG=es          # Idioma de las respuestas de la WorldCupAPI
 ```
 

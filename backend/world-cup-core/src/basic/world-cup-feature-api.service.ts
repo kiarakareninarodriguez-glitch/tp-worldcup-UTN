@@ -132,18 +132,7 @@ export class WorldCupFeatureApiService extends AbstractBaseService {
   public async getWorldCupMatchCardsById(id: string): Promise<WorldCupMatchCardsApiResponse[]> {
   return this.getEndpointData<WorldCupMatchCardsApiResponse[]>(`/world-cup/${id}/matches`, {});
 }
-  /**
-   * feature 10 jugar la final
-   * 
-    exist GET /world-cup/current - Para verificar si existe una final pendiente (canStartFinal,hasActiveFinal).
-    crear GET /match/strategies - Para poblar el selector de estrategia. Acepta ?lang=
-    crear GET /match/formations - Para poblar el selector de formación. Acepta ?lang=
-    crear POST /match/select-strategy - Para cambiar la estrategia durante el partido.
-    crear POST /match/start-final - Para iniciar la final. Body: { teamId: string }. Si ya hay un final activa, la retorna. El WorldCupCore pasa el teamId del .env (TEAM_ID).
-    crear POST /match/play - Para ejecutar un turno. Body: { matchId: string, input?: string,messageTypeId?: string }. Retorna mensajes y opciones del proximo turno.
-    crear POST /match/select-formation - Para cambiar la formación durante el partido
-   * 
-   */
+ 
 
   public async getStrategiesMatch(lang?: string): Promise<MatchStrategiesResponse[]> {
     return this.getEndpointData<MatchStrategiesResponse[]>('/match/strategies', {

@@ -143,20 +143,16 @@ export class FinalChatService extends BaseApiService {
         this.pageState.actionErrorMessage = '';
         const lang = this.getCurrentLang();
 
-        // Asumo que la API te devuelve un objeto con la data del chat (ej: FinalChatResponse)
         return this.post<FinalChatApiResponse>('/final-match/start', { lang }).pipe(
-            // 'response.data' contiene la estructura del chat activo
             map((response) => response.data),
             map((response) => this.normalizedata(response)),
 
             tap((chatActiveData) => {
-                // Guardamos la data del chat en el estado. 
-                // Al hacer esto, el HTML va a reaccionar instantáneamente.
                 this.pageState.data = chatActiveData;
 
             }),
             switchMap(() => this.loadPreview()),
-            map(() => undefined), // Mapeamos a void para mantener la firma limpia
+            map(() => undefined),
             catchError((error: HttpErrorResponse) => {
                 this.pageState.actionErrorMessage = 'No se pudo iniciar el chat.';
                 return of(undefined);
@@ -191,7 +187,6 @@ export class FinalChatService extends BaseApiService {
             map((response) => response.data),
             map((response) => this.normalizedata(response)),
             tap((updatedChatData) => {
-                // Actualiza el flujo de mensajes/opciones con la nueva respuesta
                 this.pageState.data = {
                     ...updatedChatData,
                     messageItems: [...this.pageState.data?.messageItems ?? [], ...updatedChatData.messageItems]
@@ -208,7 +203,7 @@ export class FinalChatService extends BaseApiService {
         );
     }
 
-    
+
     setStrategy(strategy: string) {
         //TODO llamar jugar opcion de la final
         this.pageState.sending = true;
@@ -218,13 +213,12 @@ export class FinalChatService extends BaseApiService {
         return this.post<SelectStrategyResponse>('/final-match/select-strategy', { strategy, lang }).pipe(
             map((response) => response.data),
             tap((updatedStrategyData) => {
-                // Actualiza el flujo de mensajes/opciones con la nueva respuesta
-                if(this.pageState.data){
-                    this.pageState.data.teamStrategy=updatedStrategyData.strategy
-                    this.pageState.data.teamStrategyLabel=updatedStrategyData.strategyLabel?? ""
+                if (this.pageState.data) {
+                    this.pageState.data.teamStrategy = updatedStrategyData.strategy
+                    this.pageState.data.teamStrategyLabel = updatedStrategyData.strategyLabel ?? ""
                 }
 
-                
+
             }),
             map(() => undefined),
             catchError((error: HttpErrorResponse) => {
@@ -238,7 +232,6 @@ export class FinalChatService extends BaseApiService {
     }
 
     setFormation(formation: string) {
-        //TODO llamar jugar opcion de la final
         this.pageState.sending = true;
         this.pageState.actionErrorMessage = '';
         const lang = this.getCurrentLang();
@@ -246,8 +239,8 @@ export class FinalChatService extends BaseApiService {
         return this.post<SelectFormationResponse>('/final-match/select-formation', { formation, lang }).pipe(
             map((response) => response.data),
             tap((updatedStrategyData) => {
-                if(this.pageState.data){
-                    this.pageState.data.teamFormation=updatedStrategyData.formation
+                if (this.pageState.data) {
+                    this.pageState.data.teamFormation = updatedStrategyData.formation
                 }
 
             }),
@@ -259,6 +252,6 @@ export class FinalChatService extends BaseApiService {
             finalize(() => {
                 this.pageState.sending = false;
             })
-        ); 
+        );
     }
 }
