@@ -18,6 +18,7 @@ export class WorldCupHistoryItemModel {
   public topScorer: { playerName: string; teamId: string; teamName: string; value: number };
   public topAssist: { playerName: string; teamId: string; teamName: string; value: number };
   public fairPlay: { teamId: string; teamName: string; teamFlag: string; fairPlayPoints: number; yellowCards: number; redCards: number; fairPlayRank: number; totalRankedTeams: number; hasData: boolean };
+  public worstFairPlay: { teamId: string; teamName: string; teamFlag: string; fairPlayPoints: number; yellowCards: number; redCards: number; fairPlayRank: number; totalRankedTeams: number; hasData: boolean };
   constructor(data: {
     worldCupId: string;
     edition: number;
@@ -35,6 +36,7 @@ export class WorldCupHistoryItemModel {
     topScorer: { playerName: string; teamId: string; teamName: string; value: number };
     topAssist: { playerName: string; teamId: string; teamName: string; value: number };
     fairPlay: { teamId: string; teamName: string; teamFlag: string; fairPlayPoints: number; yellowCards: number; redCards: number; fairPlayRank: number; totalRankedTeams: number; hasData: boolean };
+    worstFairPlay: { teamId: string; teamName: string; teamFlag: string; fairPlayPoints: number; yellowCards: number; redCards: number; fairPlayRank: number; totalRankedTeams: number; hasData: boolean };
   }) {
     this.worldCupId = data.worldCupId;
     this.worldCupIdShort = data.worldCupId.slice(-8);
@@ -55,6 +57,7 @@ export class WorldCupHistoryItemModel {
     this.topScorer = data.topScorer;
     this.topAssist = data.topAssist;
     this.fairPlay = data.fairPlay;
+    this.worstFairPlay = data.worstFairPlay;
   }
 }
 

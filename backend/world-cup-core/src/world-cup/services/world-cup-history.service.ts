@@ -3,7 +3,7 @@ import { AdminService } from "src/admin/admin.service";
 import { AbstractBaseService } from "src/basic/abstract-base.service";
 import { WorldCupFeatureApiService } from "src/basic/world-cup-feature-api.service";
 import { WorldCupHistoryItemModel, WorldCupHistoryScreenModel } from "./model/world-cup-history-service.model";
-import { WorldCupAwardsByIdApiResponse, WorldCupByIdApiResponse, WorldCupStatsByIdApiResponse } from "./model/world-cup-history-service.interface";
+import { WorldCupAwardsByIdApiResponse, WorldCupByIdApiResponse, WorldCupMatchCardsApiResponse, WorldCupStatsByIdApiResponse } from "./model/world-cup-history-service.interface";
 import { ApiErrorMappingRule, ApiErrorStatusMap, ErrorUtils } from "src/basic/error/error.utils";
 import { WorldCupCoreErrorCode } from "src/basic/model/world-cup-core-error-code.enum";
 
@@ -45,7 +45,9 @@ export class WorldCupHistoryService extends AbstractBaseService {
       if (worldCup.status === 'ENDED') {
   const stats = await this.worldCupFeatureApiService.getWorldCupStatsById(worldCupId);
   const awards = await this.worldCupFeatureApiService.getWorldCupAwardsById(worldCupId);
-  const historyItem = this.buildHistoryItem(worldCup, stats, awards);
+  const CardsinMatches = await this.worldCupFeatureApiService.getWorldCupMatchCardsById(worldCupId);
+  const worstFairPlay = this.findWorstFairPlayTeam(CardsinMatches);
+  const historyItem = this.buildHistoryItem(worldCup, stats, awards, worstFairPlay);
   historyItems.push(historyItem);
       }
     }
@@ -66,10 +68,10 @@ export class WorldCupHistoryService extends AbstractBaseService {
  private buildHistoryItem(
   worldCup: WorldCupByIdApiResponse, 
   stats: WorldCupStatsByIdApiResponse,
-  awards: WorldCupAwardsByIdApiResponse
+  awards: WorldCupAwardsByIdApiResponse,
+  worstFairPlay: { teamId: string; teamName: string; totalCards: number }
 ): WorldCupHistoryItemModel{
   const fairPlayAward = awards.find(award => award.code === 'FAIR_PLAY');
-  // FALTA EQUIPO CON PEOR FAIR PLAY!!
    return new WorldCupHistoryItemModel({
      worldCupId: worldCup.worldCupId, 
      finalPlayedAt: worldCup.updatedAt || null,
@@ -99,8 +101,46 @@ export class WorldCupHistoryService extends AbstractBaseService {
       redCards: stats.cards?.totalRedCards || 0,
       topScorer: stats.topScorers && stats.topScorers.length > 0 ? { playerName: stats.topScorers[0].playerName, teamId: stats.topScorers[0].teamId, teamName: stats.topScorers[0].teamName, value: stats.topScorers[0].value || 0 } : { playerName: '', teamId: '', teamName: '', value: 0 },
       topAssist: stats.topAssists && stats.topAssists.length > 0 ? { playerName: stats.topAssists[0].playerName, teamId: stats.topAssists[0].teamId, teamName: stats.topAssists[0].teamName, value: stats.topAssists[0].value || 0 } : { playerName: '', teamId: '', teamName: '', value: 0 },
-   }
+      worstFairPlay: {
+  teamId: worstFairPlay.teamId,
+  teamName: worstFairPlay.teamName,
+  teamFlag: '',
+  fairPlayPoints: 0,
+  yellowCards: 0,
+  redCards: 0,
+  fairPlayRank: 0,
+  totalRankedTeams: 0,
+  hasData: worstFairPlay.teamId !== '',
+},
+    }
   )
  }  
-} 
+ private findWorstFairPlayTeam(matches: WorldCupMatchCardsApiResponse[]) {
+  const cardsByTeam: Record<string, number> = {};
+  const namesByTeam: Record<string, string> = {};
+
+  matches.forEach(match => {
+    cardsByTeam[match.homeTeamId] = (cardsByTeam[match.homeTeamId] ?? 0) + (match.homeTeamTotalYellowCards ?? 0) + (match.homeTeamTotalRedCards ?? 0);
+    cardsByTeam[match.awayTeamId] = (cardsByTeam[match.awayTeamId] ?? 0) + (match.awayTeamTotalYellowCards ?? 0) + (match.awayTeamTotalRedCards ?? 0);
+    namesByTeam[match.homeTeamId] = match.homeTeamName ?? '';
+    namesByTeam[match.awayTeamId] = match.awayTeamName ?? '';
+  }
+)
+let worstTeamId = '';
+let maxCards = -1;
+
+for (const teamId of Object.keys(cardsByTeam)) {
+  if (cardsByTeam[teamId] > maxCards) {
+    maxCards = cardsByTeam[teamId];
+    worstTeamId = teamId;
+  }
+}
+
+return {
+  teamId: worstTeamId,
+  teamName: namesByTeam[worstTeamId] ?? '',
+  totalCards: maxCards,
+};
+ }
+}
 

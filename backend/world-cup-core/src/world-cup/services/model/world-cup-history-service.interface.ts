@@ -70,3 +70,13 @@ export interface WorldCupByIdApiResponse {
   export type WorldCupAwardsByIdApiResponse = WorldCupAward[];
 
     
+export interface WorldCupMatchCardsApiResponse {
+  homeTeamId?: string;
+  homeTeamName?: string;
+  awayTeamId?: string;
+  awayTeamName?: string;
+  homeTeamTotalYellowCards?: number;
+  homeTeamTotalRedCards?: number;
+  awayTeamTotalYellowCards?: number;
+  awayTeamTotalRedCards?: number;
+}

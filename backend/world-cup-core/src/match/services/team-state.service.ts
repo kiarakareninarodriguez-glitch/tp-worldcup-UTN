@@ -120,7 +120,7 @@ export class TeamStateService extends AbstractBaseService {
       isInjured: player.isInjured,
       positionTag: POSITIONS.find(posision => posision.code == player.position).label[lang],
       displayName: this.displayName(player.name),
-      energyLabel: (player.energy > 50) ? "alto" : (player.energy > 30) ? "medio" : "bajo",//
+      energyLabel: (player.energy > 70) ? "alto" : (player.energy > 40) ? "medio" : "bajo",//
       isBench: !player.isOnField,
     } as TeamStatePlayerApiItem));
 
