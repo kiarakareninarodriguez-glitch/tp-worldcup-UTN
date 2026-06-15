@@ -14,7 +14,7 @@ export class CoachingController extends AbstractController {
     super();
   }
 
-  @Get('coaches')
+  @Get('coach')
   @ApiOperation({ summary: 'Obtiene la información general del cuerpo técnico, tácticas y compatibilidad' })
   async getCoaching(
     @Query('lang') lang: string = 'es' 

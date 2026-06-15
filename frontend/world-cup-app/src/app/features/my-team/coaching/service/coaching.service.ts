@@ -57,7 +57,7 @@ export class CoachingService extends BaseApiService {
 
     initialize(): void {
     if (this.hasInitialized) {
-      // Corrección: El método no requiere parámetros, se ejecuta la tubería reactiva limpia
+      
       this.loadCoachingData().subscribe();
       return;
     }
@@ -91,9 +91,8 @@ loadCoachingData(): Observable<void> {
     this.pageState.loading = true;
     this.pageState.errorMessage = '';
 
-    return this.get<CoachingOverviewData>('/my-team/coaching', {
+    return this.get<CoachingOverviewData>('/my-team/coach', {
       lang,
-      teamId,
     }).pipe(
       
       map((response) => response.data),
