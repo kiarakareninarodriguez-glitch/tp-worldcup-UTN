@@ -16,6 +16,7 @@ import { MatchStartFinalResponse, SelectStrategyResponse } from 'src/match/servi
 import { MatchCurrentSquadResponse } from 'src/match/services/model/api/match-current-quad-response.model';
 import { MatchStrategiesResponse } from 'src/match/services/model/api/match-strategies-response.mode';
 import { MatchformationsResponse, SelectFormationResponse } from 'src/match/services/model/api/match-formations-response.mode';
+import { CoachingApiResponse, CoachingScreenResponse, CoachStatApiResponse } from 'src/teams/services/model/coaching-interface';
 
 @Injectable()
 export class WorldCupFeatureApiService extends AbstractBaseService {
@@ -31,9 +32,16 @@ export class WorldCupFeatureApiService extends AbstractBaseService {
     super(adminService, worldCupApiService);
   }
 
-  public async getCoach(teamId: string, lang?: string): Promise<any> {
-    return this.getEndpointData<any>(`/teams/coaches`, {
+  public async getCoach(teamId: string, lang?: string): Promise<CoachingApiResponse[]> {
+    return this.getEndpointData<CoachingApiResponse[]>(`/teams/coaches/`, {
       teamId,
+    });
+  }
+
+  public async getStats(teamId: string, lang?: string): Promise <CoachStatApiResponse> {
+
+     return this.getEndpointData<CoachStatApiResponse>(`/teams/${teamId}/stats`, {
+      lang: this.resolveLang(lang),
     });
   }
 

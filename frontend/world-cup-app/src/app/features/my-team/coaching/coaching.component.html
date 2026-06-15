@@ -1,6 +1,42 @@
+
+
+ <section class="coaching-status-pill" *ngIf="!pageState.loading && pageState.errorMessage" class="state-card">
+    <div class="empty-icon">⚠️</div>
+    <p>{{ pageState.errorMessage }}</p>
+  </section>
+
 <section class="card">
+
   <div class="card-header">
-    <span class="card-title">Cuerpo técnico</span>
+    <span class="card-title">Cuerpo técnico: {{ pageState.selectedTeamLabel }} </span>
+ 
   </div>
-  <p>Este componente debe ser desarrollado por el alumno.</p>
-</section>
+  
+
+   <section *ngIf="pageState.loading" class="state-card">
+    <p>Cargando información del Cuerpo técnico.</p>
+  </section>
+ 
+  <div class="card-body">
+    <p>DT: {{ pageState.coach?.name}}</p>
+    <p>Edad: {{pageState.coach?.age}}</p>
+     <div></div>
+    
+    <router-outlet></router-outlet>
+  </div>
+
+ <div class="card-body">
+    <p></p>
+    <p></p>
+    
+  </div>
+
+<section class= ".coaching-compatibility-label" href="#">
+  <div class="card-header">
+    <span class="card-body"></span>
+    <p>Panel de entrenamiento
+      </p>
+   
+
+  </div>
+  </section>

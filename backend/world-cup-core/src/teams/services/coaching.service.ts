@@ -1,66 +1,73 @@
-import { Injectable, HttpException, HttpStatus } from '@nestjs/common'; // 👈 CORRECCIÓN 1: Importados explícitamente de @nestjs/common
+import { HttpStatus, Injectable } from '@nestjs/common';
+import { AdminService } from 'src/admin/admin.service';
+import { AbstractBaseService } from 'src/basic/abstract-base.service';
+import { ApiErrorMappingRule, ApiErrorStatusMap, ErrorUtils } from 'src/basic/error/error.utils';
+import { LanguageEnum } from 'src/basic/model/language.enum';
+import { WorldCupCoreErrorCode } from 'src/basic/model/world-cup-core-error-code.enum';
 import { WorldCupApiService } from 'src/basic/world-cup-api.service';
+import { MatchformationsResponse, SelectFormationResponse } from 'src/match/services/model/api/match-formations-response.mode';
+import { SelectStrategyResponse } from 'src/match/services/model/api/match-start-final-response.model';
+import { MatchStrategyLabels } from 'src/match/services/model/api/match-strategy.enum';
+import { WorldCupFeatureApiService } from 'src/basic/world-cup-feature-api.service';
+import { CoachingResponse, CoachingApiResponse, CoachingScreenResponse, CoachStrategyCatalogApiItem, CoachFormationCatalogApiItem, CoachStatApiResponse, CoachingCoach } from './model/coaching-interface';
+import { CoachProfile } from './model/api/coach-profile.enum';
+import { MatchStrategiesResponse } from 'src/match/services/model/api/match-strategies-response.mode';
 
-interface ExternalCoachApiItem {
-  coachId: string;
-  teamId: string;
-  teamName: string;
-  name: string;
-  age: number;
-  nationality: string;
-  profile: string; 
-  riskAppetite: number;
-  gameManagement: number;
-  adaptability: number;
-  pressingBias: number;
-  possessionBias: number;
-  defenseBias: number;
-  maxStrategyChanges: number;
-}
+
+
+const COACHING_API_ERROR_STATUS_MAP: ApiErrorStatusMap = {
+  [HttpStatus.NOT_FOUND]: {
+    messageCode: WorldCupCoreErrorCode.WC_COACHING_NOT_FOUND,
+    message: 'No se encontró el cuerpo técnico en el sistema central para el equipo seleccionado.',
+    statusCode: HttpStatus.NOT_FOUND,
+  },
+};
+
+const COACHING_API_ERROR_FALLBACK: ApiErrorMappingRule = {
+  messageCode: WorldCupCoreErrorCode.WC_COACH_UNAVAILABLE,
+  message: 'No se pudo cargar la información de coaching desde la World Cup API.',
+  statusCode: HttpStatus.BAD_GATEWAY,
+};
 
 @Injectable()
-export class CoachingService {
-  private readonly defaultTeamId: string = process.env.TEAM_ID || 'SEN'; 
+export class CoachingService extends AbstractBaseService {
 
   constructor(
-    private readonly worldCupApiService: WorldCupApiService
-  ) {}
+    protected readonly worldCupFeatureApiService: WorldCupFeatureApiService,
+    adminService: AdminService,
+  ) {
+    super(adminService);
+  }
 
-  async getCoachingOverview(teamId: string, lang: string = 'es') {
+
+
+  public async getCoachingOverview(lang?: string): Promise<CoachingScreenResponse> {
     try {
-      const activeTeamId = teamId ? teamId.toUpperCase() : this.defaultTeamId;
 
-      const coachesData = await this.worldCupApiService.get<ExternalCoachApiItem[]>(
-        `/teams/${activeTeamId}/coaches`, 
-        { lang }
-      );
-      
-      const coachData = coachesData && coachesData.length > 0 ? coachesData[0] : null;
+      const teamId = this.getCurrentTeamId();
+      const resolvedLang = this.resolveLang(lang);
+      const strategyCatalog: MatchStrategiesResponse[] = await this.worldCupFeatureApiService.getStrategiesMatch(resolvedLang);
+      const formationCatalog: MatchformationsResponse[] = await this.worldCupFeatureApiService.getFormationsMatch(resolvedLang);
+      //const currentStrategy = this.getCoachingStrategy();
 
-      if (!coachData) {
-        throw new HttpException(
-          `No se encontró cuerpo técnico en el sistema central para el equipo: ${activeTeamId}`, 
-          HttpStatus.NOT_FOUND
-        );
-      }
+      const coachesData: CoachingApiResponse[] = await this.worldCupFeatureApiService.getCoach(teamId, lang);
+      const coachStats: CoachStatApiResponse = await this.worldCupFeatureApiService.getStats(teamId, lang);
+      const coachData = coachesData[0] 
 
-    
-      return {
-        teamId: activeTeamId,
+
+      /*if (!coachData) {
+        throw { status: HttpStatus.NOT_FOUND };
+      }*/
+
+      const response = {
         coach: {
           coachId: coachData.coachId,
           teamId: coachData.teamId,
           teamName: coachData.teamName,
-          name: coachData.name,                 
-          age: coachData.age,                   
+          name: coachData.name,
+          age: coachData.age,
           nationality: coachData.nationality,
           profile: coachData.profile,
-          profileLabel: coachData.profile === 'AGGRESSIVE'
-            ? (lang === 'en' ? "Aggressive / Offensive" : "Agresivo / Ofensivo")
-            : (lang === 'en' ? "Pragmatic / Balanced" : "Pragmático / Equilibrado"),
-          profileDescription: coachData.profile === 'AGGRESSIVE'
-            ? (lang === 'en' ? "Prioritizes high pressing and fast attacking transitions." : "Prioriza la presión alta y transiciones ofensivas rápidas.")
-            : (lang === 'en' ? "Prioritizes defensive solidity and tactical discipline." : "Prioriza la solidez defensiva y el orden táctico."),
           riskAppetite: coachData.riskAppetite,
           gameManagement: coachData.gameManagement,
           adaptability: coachData.adaptability,
@@ -69,58 +76,104 @@ export class CoachingService {
           defenseBias: coachData.defenseBias,
           maxStrategyChanges: coachData.maxStrategyChanges
         },
-        strategy: {
-          teamId: activeTeamId,
-          strategy: "COUNTER_ATTACK" 
-        },
-        formation: {
-          teamId: activeTeamId,
-          formation: "4-3-3"
-        },
         stats: {
-          attack: coachData.pressingBias ? Math.round((coachData.riskAppetite + coachData.pressingBias) / 2) : 75,
-          defense: coachData.defenseBias ?? 80,
-          midfield: coachData.possessionBias ?? 74,
-          overall: coachData.gameManagement ?? 76,
-          current_strategy: lang === 'en' ? "Counter-Attack" : "Contraataque",
-          current_formation: "4-3-3"
+          attack: coachStats.attack,
+          defense: coachStats.defense,
+          midfield: coachStats.midfield,
+          overall: coachStats.overall,
+          current_strategy: coachStats.current_strategy,
+          current_formation: coachStats.current_formation
         },
-        baseRatings: [
-          { metric: lang === 'en' ? "Base Attack" : "Ataque Base", value: 72 },
-          { metric: lang === 'en' ? "Base Defense" : "Defensa Base", value: 78 }
-        ],
-        effectiveRatings: [
-          { metric: lang === 'en' ? "Effective Attack" : "Ataque Efectivo", value: 75 },
-          { metric: lang === 'en' ? "Effective Defense" : "Defensa Efectiva", value: 80 }
-        ],
-        ratingDeltas: [
-          { metric: lang === 'en' ? "Team Morale" : "Moral del Equipo", strategyDelta: 3, compatibilityPenalty: 0, totalDelta: 3 }
-        ],
-        strategyPenalty: 0,
-        strategies: [
-          { strategy: "COUNTER_ATTACK", description: lang === 'en' ? "Low block and fast breaks" : "Defensa baja y salida rápida", compatibleFormations: ["4-3-3", "4-4-2"] },
-          { strategy: "POSSESSION", description: lang === 'en' ? "Short passing and ball control" : "Control del balón y pases cortos", compatibleFormations: ["4-3-3"] }
-        ],
-        formations: [
-          { formation: "4-3-3", description: lang === 'en' ? "Classic offensive blueprint" : "Esquema ofensivo clásico", compatibleStrategies: ["COUNTER_ATTACK", "POSSESSION"] },
-          { formation: "4-4-2", description: lang === 'en' ? "Balanced midfield grid" : "Equilibrio en el mediocampo", compatibleStrategies: ["COUNTER_ATTACK"] }
-        ],
-        compatibility: {
-          selectedStrategy: "COUNTER_ATTACK",
-          selectedFormation: "4-3-3",
-          compatibleFormations: ["4-3-3", "4-4-2"],
-          compatibleStrategies: ["COUNTER_ATTACK", "POSSESSION"],
-          byStrategy: { "COUNTER_ATTACK": ["4-3-3", "4-4-2"] },
-          byFormation: { "4-3-3": ["COUNTER_ATTACK", "POSSESSION"] },
-          isSelectedPairCompatible: true
-        }
-      };
+        strategys: strategyCatalog.map((item) => {
+          return {
+            strategy: item.strategy,
+            strategyLabel: MatchStrategyLabels[item.strategy],
+            description: item.description
+          } as CoachStrategyCatalogApiItem
+        }),
+        formations: formationCatalog.map((item) => {
+          return {
+            formation: item.formation,
+            description: item.description
+          } as CoachFormationCatalogApiItem
+        }),
 
-    } catch (error: any) {
-      throw new HttpException(
-        error.message || 'Error al conectar con la API de la FIFA',
-        error.status || HttpStatus.INTERNAL_SERVER_ERROR
+
+       } as CoachingScreenResponse;
+
+      return response
+
+    } catch (error) {
+      ErrorUtils.mapWorldCupApiError(
+        error,
+        COACHING_API_ERROR_STATUS_MAP,
+        COACHING_API_ERROR_FALLBACK,
+      );
+    }
+
+  }
+
+  /*public async getCoachingStrategy(lang?: string): Promise<CoachingResponse> {
+    const Strategy =this.;
+    return {
+      teamId: this.getCurrentTeamId(),
+      strategy: this. , 
+    }
+  }*/
+
+
+  public async selectformation(formation: string, lang: LanguageEnum): Promise<SelectFormationResponse> {
+    try {
+
+      const teamId = this.getCurrentTeamId();
+      const resolvedLang = this.resolveLang(lang);
+      const selectFormationResponse: SelectFormationResponse = await this.worldCupFeatureApiService.selectFormationMatch(teamId, formation, resolvedLang)
+
+      return selectFormationResponse;
+    } catch (error) {
+      ErrorUtils.mapWorldCupApiError(
+        error,
+        COACHING_API_ERROR_STATUS_MAP,
+        COACHING_API_ERROR_FALLBACK,
       );
     }
   }
+
+  public async selectStrategy(strategy: string, lang: LanguageEnum): Promise<SelectStrategyResponse> {
+    try {
+
+      const teamId = this.getCurrentTeamId();
+      const resolvedLang = this.resolveLang(lang);
+      console.log(teamId, strategy, resolvedLang)
+      const selectStrategyResponse: SelectStrategyResponse = await this.worldCupFeatureApiService.selectStrategyMatch(teamId, strategy, resolvedLang);
+
+      selectStrategyResponse.strategyLabel = MatchStrategyLabels[selectStrategyResponse.strategy];
+
+      return selectStrategyResponse;
+    } catch (error) {
+      ErrorUtils.mapWorldCupApiError(
+        error,
+        COACHING_API_ERROR_STATUS_MAP,
+        COACHING_API_ERROR_FALLBACK,
+      );
+    }
+  }
+
+
 }
+
+
+
+
+
+
+/* selectStrategy(strategy: string, lang?: string): any {
+  const resolvedLang = this.resolveLang(lang);
+  const strategyName = strategy === "" ? (resolvedLang === LanguageEnum.ES ? "Contraataque" : "Counter-Attack") : strategy;
+  return {
+    teamId: this.getCurrentTeamId(),
+    strategy,
+    message: resolvedLang === LanguageEnum.ES ? `Estrategia cambiada a ${strategyName}` : `Strategy changed to ${strategyName}`
+  };
+}
+}*/
