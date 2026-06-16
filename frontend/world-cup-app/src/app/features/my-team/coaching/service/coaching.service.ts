@@ -12,52 +12,54 @@ import {
 import { CoachingViewModel } from '../model/coaching-view-model.interface';
 import { BaseApiService } from '../../../../core/services/base-api.service';
 import { AdminService } from 'src/app/shared/admin/service/admin.service';
-import { CoachingOverviewData } from '../model/coaching-api.interface';
+import { CoachFormationResponse, CoachingOverviewData, CoachStrategyResponse } from '../model/coaching-api.interface';
 import { AppContextService } from 'src/app/core/services/app-context.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Injectable({ providedIn: 'root' })
 export class CoachingService extends BaseApiService {
-    private readonly adminService = inject(AdminService);
-    protected override readonly appContextService = inject(AppContextService);
 
-    private readonly pageState: CoachingViewModel = {
-        lang: 'es',
-        loading: false,
-        savingStrategy: false,
-        savingFormation: false,
-        savingResetDefault: false,
-        errorMessage: '',
-        selectedTeamLabel: '',
-        coach: null,
-        strategy: null,
-        formation: null,
-        stats: null,
-        strategies: [],
-        formations: [],
-        selectedStrategy: '',
-        selectedFormation: '',
-        selectedStrategyDescription: '',
-        compatibleFormations: [],
-        compatibleStrategies: [],
-        baseRatings: [],
-        effectiveRatings: [],
-        ratingDeltas: [],
-        strategyPenalty: 0,
-        isSelectedFormationCompatible: true,
-        tacticalStatusTone: 'original',
-        tacticalStatusLabelKey: '',
-    }
+  private readonly adminService = inject(AdminService);
+  protected override readonly appContextService = inject(AppContextService);
 
-    private hasInitialized = false;
-        
+  private readonly pageState: CoachingViewModel = {
+    lang: 'es',
+    loading: false,
+    savingStrategy: false,
+    savingFormation: false,
+    savingResetDefault: false,
+    errorMessage: '',
+    selectedTeamLabel: '',
+    coach: null,
+    strategy: null,
+    formation: null,
+    stats: null,
+    strategies: [],
+    formations: [],
+    selectedStrategy: '',
+    selectedFormation: '',
+    selectedStrategyDescription: '',
+    compatibleFormations: [],
+    compatibleStrategies: [],
+    baseRatings: [],
+    effectiveRatings: [],
+    ratingDeltas: [],
+    strategyPenalty: 0,
+    isSelectedFormationCompatible: true,
+    tacticalStatusTone: 'original',
+    tacticalStatusLabelKey: '',
+  }
 
-    getviewModel(): CoachingViewModel {
-        return this.pageState;
-    }
+  private hasInitialized = false;
 
-    initialize(): void {
+
+  getviewModel(): CoachingViewModel {
+    return this.pageState;
+  }
+
+  initialize(): void {
     if (this.hasInitialized) {
-      
+
       this.loadCoachingData().subscribe();
       return;
     }
@@ -71,20 +73,20 @@ export class CoachingService extends BaseApiService {
     });
 
     combineLatest([
-      this.appContextService.currentTeamId$, 
+      this.appContextService.currentTeamId$,
       this.appContextService.lang$
     ])
-    .pipe(
-      tap(([teamId, lang]) => {
-        this.pageState.lang = lang === 'en' ? 'en' : 'es';
-        this.pageState.selectedTeamLabel = teamId ? teamId.toUpperCase() : 'ARG';
-      }),
-      switchMap(() => this.loadCoachingData())
-    )
-    .subscribe();
-    }
+      .pipe(
+        tap(([teamId, lang]) => {
+          this.pageState.lang = lang === 'en' ? 'en' : 'es';
+          this.pageState.selectedTeamLabel = teamId ? teamId.toUpperCase() : 'ARG';
+        }),
+        switchMap(() => this.loadCoachingData())
+      )
+      .subscribe();
+  }
 
-loadCoachingData(): Observable<void> {
+  loadCoachingData(): Observable<void> {
     const lang = this.getCurrentLang();
     const teamId = this.getCurrentTeamId();
 
@@ -94,7 +96,7 @@ loadCoachingData(): Observable<void> {
     return this.get<CoachingOverviewData>('/my-team/coach', {
       lang,
     }).pipe(
-      
+
       map((response) => response.data),
       tap((payload) => {
         if (!payload) return;
@@ -105,10 +107,10 @@ loadCoachingData(): Observable<void> {
         this.pageState.stats = payload.stats;
         this.pageState.strategies = payload.strategies ?? [];
         this.pageState.formations = payload.formations ?? [];
-        
+
         this.pageState.selectedStrategy = payload.strategy?.strategy ?? '';
         this.pageState.selectedFormation = payload.formation?.formation ?? '';
-        
+
         this.pageState.baseRatings = payload.baseRatings ?? [];
         this.pageState.effectiveRatings = payload.effectiveRatings ?? [];
         this.pageState.ratingDeltas = payload.ratingDeltas ?? [];
@@ -121,22 +123,59 @@ loadCoachingData(): Observable<void> {
           this.pageState.tacticalStatusTone = payload.compatibility.isSelectedPairCompatible ? 'compatible' : 'incompatible';
         }
       }),
-      
+
       map(() => undefined),
       catchError(() => {
-        
+
         this.pageState.coach = null;
         this.pageState.stats = null;
         this.pageState.errorMessage = 'No se pudo recuperar la configuración del cuerpo técnico.';
         return of(undefined);
       }),
-      
+
       finalize(() => {
         this.pageState.loading = false;
       })
     );
   }
+
+  selectStrategy(strategy: string) {
+
+    const lang = this.getCurrentLang();
+
+    return this.post<CoachStrategyResponse>('/final-match/select-strategy', { strategy, lang }).pipe(
+      map((response) => response.data),
+      tap((updatedStrategyData) => {
+        this.pageState.selectedStrategy = updatedStrategyData.strategy
+      }),
+      map(() => undefined),
+      catchError((error: HttpErrorResponse) => {
+        return of(undefined);
+      }),
+      finalize(() => {
+      })
+    );
+
+  }
+  selectFormation(formation: string) {
+    const lang = this.getCurrentLang();
+
+    return this.post<CoachFormationResponse>('/final-match/select-formation', { formation, lang }).pipe(
+      map((response) => response.data),
+      
+      tap((updatedStrategyData) => {
+        this.pageState.selectedFormation = updatedStrategyData.formation
+      }),
+      map(() => undefined),
+      catchError((error: HttpErrorResponse) => {
+        return of(undefined);
+      }),
+      finalize(() => { })
+    );;
+  }
+
+
 }
 
-    
+
 

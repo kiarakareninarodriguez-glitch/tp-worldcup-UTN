@@ -34,7 +34,7 @@ export interface CoachingTeamStats {
   overall: number;
   current_strategy: string;
   current_formation: string;
-}
+} 
 
 export interface CoachingStrategyCatalogItem {
   strategy: string;
@@ -90,4 +90,18 @@ export interface CoachingOverviewData {
   strategies: CoachingStrategyCatalogItem[];
   formations: CoachingFormationCatalogItem[];
   compatibility: CoachingCompatibility;
+}
+export interface CoachFormationResponse {
+  teamId: string;
+  formation: string;
+  message: string;
+}
+
+export interface CoachStrategyResponse {
+  teamId: string
+  strategy: string
+  formation: string
+  formationAutoAdjusted: boolean
+  message: string
+  strategyLabel: string | undefined;
 }
