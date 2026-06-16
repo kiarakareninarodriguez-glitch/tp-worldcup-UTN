@@ -15,11 +15,12 @@ import { MatchStartFinalResponse, SelectStrategyResponse } from 'src/match/servi
 import { MatchCurrentSquadResponse } from 'src/match/services/model/api/match-current-quad-response.model';
 import { MatchStrategiesResponse } from 'src/match/services/model/api/match-strategies-response.mode';
 import { MatchformationsResponse, SelectFormationResponse } from 'src/match/services/model/api/match-formations-response.mode';
+import type { GroupApiItem } from '../world-cup/services/model/simulation-service.interface';
 
 @Injectable()
 export class WorldCupFeatureApiService extends AbstractBaseService {
-  public async getGroups(lang?: string): Promise<any> {
-  return this.getEndpointData<any>('/world-cup/current/groups', {
+ public async getGroups(lang?: string): Promise<GroupApiItem[]> {
+  return this.getEndpointData<GroupApiItem[]>('/world-cup/current/groups', {
     lang: this.resolveLang(lang),
   });
 }
