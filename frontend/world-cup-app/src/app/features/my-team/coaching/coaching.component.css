@@ -268,3 +268,50 @@
     grid-template-columns: 1fr;
   }
 }
+
+.coach-metrics-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px 20px;
+  margin-top: 16px;
+}
+
+.metric-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.metric-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.metric-value {
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.metric-track {
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+
+.metric-fill {
+  height: 100%;
+  background: var(--team-accent);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+
+@media (max-width: 960px) {
+  .coach-metrics-grid {
+    grid-template-columns: 1fr; 
+  }
+}

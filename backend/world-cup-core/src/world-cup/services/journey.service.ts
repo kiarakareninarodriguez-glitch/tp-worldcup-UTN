@@ -47,21 +47,71 @@ export class JourneyService extends AbstractBaseService {
   }
 
   private buildJourneyModel(raw: JourneyApiRawResponse): JourneyScreenModel {
-    return {
-      worldCupId: raw.worldCupId ?? '',
-      teamId: raw.teamId ?? '',
-      teamName: raw.teamName ?? '',
-      lang: raw.lang ?? 'es',
-      worldCupStatus: raw.worldCupStatus ?? '',
-      stageReached: raw.stageReached ?? '',
-      stageReachedLabel: raw.stageReachedLabel ?? '',
-      isChampion: raw.isChampion ?? false,
-      isFinalPending: raw.isFinalPending ?? false,
-      eliminatedByTeamId: raw.eliminatedByTeamId ?? null,
-      eliminatedByTeamName: raw.eliminatedByTeamName ?? null,
-      summary: raw.summary ?? '',
-      matchesPlayed: raw.matchesPlayed ?? 0,
-      matches: raw.matches ?? [],
-    };
-  }
+  const matches = (raw.matches ?? []).map((match) => ({
+    stage: match.stage ?? '',
+    stageLabel: this.resolveStageLabel(match.stage ?? ''),
+    matchCode: match.matchCode ?? '',
+    opponentTeamId: match.opponentTeamId ?? '',
+    opponentTeamName: match.opponentTeamName ?? '',
+    opponentFlag: '',
+    goalsFor: match.goalsFor ?? null,
+    goalsAgainst: match.goalsAgainst ?? null,
+    scoreLabel: match.isPending ? '' : `${match.goalsFor} - ${match.goalsAgainst}`,
+    result: match.result ?? '',
+    resultLabel: this.resolveResultLabel(match.result ?? ''),
+    resultStyle: (match.result ?? 'PENDING') as 'WIN' | 'LOSS' | 'DRAW' | 'PENDING',
+    resolution: match.resolution ?? '',
+    resolutionLabel: this.resolveResolutionLabel(match.resolution ?? ''),
+    isPending: match.isPending ?? false,
+  }));
+
+  return {
+    worldCupId: raw.worldCupId ?? '',
+    teamId: raw.teamId ?? '',
+    teamName: raw.teamName ?? '',
+    lang: raw.lang ?? 'es',
+    worldCupStatus: raw.worldCupStatus ?? '',
+    stageReached: raw.stageReached ?? '',
+    stageReachedLabel: this.resolveStageLabel(raw.stageReached ?? ''),
+    isChampion: raw.isChampion ?? false,
+    isFinalPending: raw.isFinalPending ?? false,
+    eliminatedByTeamId: raw.eliminatedByTeamId ?? null,
+    eliminatedByTeamName: raw.eliminatedByTeamName ?? null,
+    summary: raw.summary ?? '',
+    matchesPlayed: matches.filter((m) => !m.isPending).length,
+    matches,
+  };
+}
+
+private resolveStageLabel(stage: string): string {
+  const map: Record<string, string> = {
+    GROUP_STAGE: 'Fase de grupos',
+    ROUND_OF_32: '32avos de final',
+    ROUND_OF_16: 'Octavos de final',
+    QUARTER_FINALS: 'Cuartos de final',
+    SEMI_FINALS: 'Semifinal',
+    FINAL: 'Final',
+  };
+  return map[stage] ?? stage;
+}
+
+private resolveResultLabel(result: string): string {
+  const map: Record<string, string> = {
+    WIN: 'Victoria',
+    LOSS: 'Derrota',
+    DRAW: 'Empate',
+    PENDING: 'Pendiente',
+  };
+  return map[result] ?? result;
+}
+
+private resolveResolutionLabel(resolution: string): string {
+  const map: Record<string, string> = {
+    REGULAR_TIME: 'Tiempo reglamentario',
+    EXTRA_TIME: 'Tiempo suplementario',
+    PENALTIES: 'Penales',
+    PENDING: 'Pendiente',
+  };
+  return map[resolution] ?? resolution;
+}
 }

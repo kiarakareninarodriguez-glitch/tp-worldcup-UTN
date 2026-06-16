@@ -18,3 +18,50 @@
     align-items: flex-start;
   }
 }
+.world-cups-history {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.world-cup-card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.world-cup-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.section-subtitle {
+  margin: 0 0 8px;
+  font-size: 14px;
+  color: var(--team-primary);
+}
+
+.podium-list,
+.stats-list,
+.highlights-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.world-cup-card-body {
+  display: flex;
+  flex-direction: row;
+  gap: 24px;
+}
+
+.world-cup-card-body > section {
+  flex: 1;
+}

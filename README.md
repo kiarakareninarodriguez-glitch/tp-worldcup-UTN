@@ -58,7 +58,7 @@ Entre sus responsabilidades se incluyen:
 | 7 | Cristian Demian Larrousse | Historial de Mundiales | El Mundial |
 | 8 | Olivar Jazmín | Eventos en Vivo | La Final |
 | 9 | Galarza Alejandro | Estado del Equipo en la Final | La Final |
-| 10 || **Jugar la Final** *(Responsabilidad Grupal)* | La Final |
+| 10 | Galarza Alejandro | **Jugar la Final** *(Responsabilidad Grupal)* | La Final |
 
 > **Jugar la Final** es obligatoria para la aprobación del TP y responsabilidad de todo el grupo. Debe poder jugarse de principio a fin sin errores. De ella dependen: Eventos en Vivo, Estado del Equipo, Estadísticas y Premios e Historial de Mundiales.
 
@@ -112,7 +112,7 @@ WORLD_CUP_API_BASE_PATH=/worldCup
 
 CORS_ALLOWED_ORIGIN=http://localhost:3101
 
-TEAM_ID=arg          # ID del equipo asignado a este grupo
+TEAM_ID=sen          # ID del equipo asignado a este grupo
 APP_LANG=es          # Idioma de las respuestas de la WorldCupAPI
 ```
 
