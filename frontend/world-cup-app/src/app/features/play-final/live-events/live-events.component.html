@@ -1,6 +1,37 @@
-<section class="card">
-  <div class="card-header">
-    <span class="card-title">Eventos en vivo</span>
+<section class="twc-card">
+
+  <div class="twc-card__header">
+    <span class="twc-card__title">Eventos en vivo</span>
   </div>
-  <p>Este componente debe ser desarrollado por el alumno.</p>
+
+  <div class="twc-card__body">
+
+    <!-- Loading -->
+    <p *ngIf="vm.loading">Cargando...</p>
+
+    <!-- Error -->
+    <p *ngIf="vm.errorMessage">{{ vm.errorMessage }}</p>
+
+    <!-- DATA -->
+    <div *ngIf="vm.data">
+
+      <h3>
+        {{ vm.data.team.name }} vs {{ vm.data.opponent.name }}
+      </h3>
+
+      <p>Resultado: {{ vm.data.score }}</p>
+      <p>Minuto: {{ vm.data.minute }}</p>
+
+      <hr>
+
+      <div *ngFor="let ev of vm.data.events">
+        <p>
+          <strong>{{ ev.minute }}'</strong> - {{ ev.text }}
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+
 </section>
