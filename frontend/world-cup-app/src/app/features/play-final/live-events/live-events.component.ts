@@ -22,7 +22,11 @@ export class LiveEventsPageComponent implements OnInit {
   ngOnInit(): void {
     this.liveEventsService.getLiveEvents().subscribe({
       next: (resp: any) => {
-        this.vm.data = resp.data;
+        this.vm.data = resp?.data ?? null;
+
+        
+        this.vm.showNoFinalState = !this.vm.data;
+
         this.vm.loading = false;
       },
       error: () => {
