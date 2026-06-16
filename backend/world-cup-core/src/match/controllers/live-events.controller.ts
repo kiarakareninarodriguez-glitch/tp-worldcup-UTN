@@ -1,8 +1,15 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { LiveEventsService } from '../services/live-events.service';
 
 @ApiTags('final-match')
 @Controller('final-match')
 export class LiveEventsController {
-  // TODO: Se debe implementar el controlador y el servicio correspondiente.
+
+  constructor(private readonly liveEventsService: LiveEventsService) {}
+
+  @Get('live-events')
+  async getLiveEvents() {
+    return await this.liveEventsService.getLiveEvents();
+  }
 }
