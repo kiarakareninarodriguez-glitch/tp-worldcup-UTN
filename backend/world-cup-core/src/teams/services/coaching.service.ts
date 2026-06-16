@@ -9,7 +9,7 @@ import { MatchformationsResponse, SelectFormationResponse } from 'src/match/serv
 import { SelectStrategyResponse } from 'src/match/services/model/api/match-start-final-response.model';
 import { MatchStrategyLabels } from 'src/match/services/model/api/match-strategy.enum';
 import { WorldCupFeatureApiService } from 'src/basic/world-cup-feature-api.service';
-import { CoachingResponse, CoachingApiResponse, CoachingScreenResponse, CoachStrategyCatalogApiItem, CoachFormationCatalogApiItem, CoachStatApiResponse, CoachingCoach } from './model/coaching-interface';
+import { CoachingResponse, CoachingApiResponse, CoachingScreenResponse, CoachStrategyCatalogApiItem, CoachFormationCatalogApiItem, CoachStatApiResponse, CoachingCoach, TeamFormation, TeamStragegy } from './model/coaching-interface';
 import { CoachProfile } from './model/api/coach-profile.enum';
 import { MatchStrategiesResponse } from 'src/match/services/model/api/match-strategies-response.mode';
 
@@ -48,17 +48,15 @@ export class CoachingService extends AbstractBaseService {
       const resolvedLang = this.resolveLang(lang);
       const strategyCatalog: MatchStrategiesResponse[] = await this.worldCupFeatureApiService.getStrategiesMatch(resolvedLang);
       const formationCatalog: MatchformationsResponse[] = await this.worldCupFeatureApiService.getFormationsMatch(resolvedLang);
-      //const currentStrategy = this.getCoachingStrategy();
+      const teamFormation: TeamFormation = await this.worldCupFeatureApiService.getFormation(teamId, lang);
+      const teamStrategy: TeamStragegy = await this.worldCupFeatureApiService.getStrategy(teamId, lang);
 
       const coachesData: CoachingApiResponse[] = await this.worldCupFeatureApiService.getCoach(teamId, lang);
       const coachStats: CoachStatApiResponse = await this.worldCupFeatureApiService.getStats(teamId, lang);
       const coachData = coachesData[0] 
 
 
-      /*if (!coachData) {
-        throw { status: HttpStatus.NOT_FOUND };
-      }*/
-
+     
       const response = {
         coach: {
           coachId: coachData.coachId,
@@ -84,7 +82,9 @@ export class CoachingService extends AbstractBaseService {
           current_strategy: coachStats.current_strategy,
           current_formation: coachStats.current_formation
         },
-        strategys: strategyCatalog.map((item) => {
+        strategy: teamStrategy,
+        formation: teamFormation,
+        strategies: strategyCatalog.map((item) => {
           return {
             strategy: item.strategy,
             strategyLabel: MatchStrategyLabels[item.strategy],
@@ -113,13 +113,7 @@ export class CoachingService extends AbstractBaseService {
 
   }
 
-  /*public async getCoachingStrategy(lang?: string): Promise<CoachingResponse> {
-    const Strategy =this.;
-    return {
-      teamId: this.getCurrentTeamId(),
-      strategy: this. , 
-    }
-  }*/
+  
 
 
   public async selectformation(formation: string, lang: LanguageEnum): Promise<SelectFormationResponse> {

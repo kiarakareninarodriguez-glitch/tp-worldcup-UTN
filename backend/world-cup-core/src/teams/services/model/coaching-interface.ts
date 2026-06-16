@@ -43,9 +43,10 @@ export interface CoachingScreenResponse {
 
     coach: CoachingCoach;
     formations: CoachFormationCatalogApiItem[];
-    strategys: CoachStrategyCatalogApiItem[];
+    strategies: CoachStrategyCatalogApiItem[];
     stats: CoachStatApiResponse;
-
+    formation: TeamFormation;
+    strategy: TeamStragegy;
 }
 
 export interface CoachingCoach {
@@ -65,4 +66,13 @@ export interface CoachingCoach {
   possessionBias: number;
   defenseBias: number;
   maxStrategyChanges: number;
+}
+
+
+export interface TeamStragegy {
+    strategy: string; 
+}
+
+export interface TeamFormation {
+    formation: string; 
 }
