@@ -34,8 +34,9 @@ export class RivalsService extends AbstractBaseService {
         const team = teamData[0] as RivalTeamCatalogItem | undefined;
 
         return {
-          id: rival.id,
+         id: rival.id,
           name: rival.name,
+          flagEmoji: this.getFlagEmoji(rival.id),
           confederation: team?.group ?? 'N/A',
           overallRating: team?.rating ?? 0,
           coachName: team?.coach ?? 'N/A',
@@ -52,5 +53,16 @@ export class RivalsService extends AbstractBaseService {
       totalRivals: enrichedRivals.length,
       rivals: enrichedRivals,
     };
+  }
+   private getFlagEmoji(teamId: string): string {
+    const flags: Record<string, string> = {
+      mar: '🇲🇦',
+      civ: '🇨🇮',
+      gha: '🇬🇭',
+      egy: '',
+      alg: '',
+    };
+
+    return flags[teamId.toLowerCase()] ?? '🏳️';
   }
 }
