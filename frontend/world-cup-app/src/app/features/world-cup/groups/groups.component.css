@@ -95,3 +95,14 @@ table th:nth-child(3) {
 table th:nth-child(2) {
   text-align: left;
 }
+
+.col-pos { width: 40px; }
+.col-equipo { width: 150px; text-align: left; }
+.col-conf { width: 70px; }
+.col-num { width: 40px; }
+.col-clas { width: 50px; }
+
+.user-team-row {
+  background: color-mix(in srgb, var(--team-primary) 15%, transparent);
+  font-weight: 600;
+}

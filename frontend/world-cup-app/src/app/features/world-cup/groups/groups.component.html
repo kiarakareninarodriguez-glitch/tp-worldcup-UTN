@@ -28,6 +28,7 @@
     <!-- Tabs de grupos -->
     <nav class="group-tabs mt-16">
       <button
+        type="button"
         *ngFor="let group of pageState.groups"
         class="group-tab"
         [class.group-tab-active]="group.group === pageState.selectedGroup"
@@ -36,27 +37,33 @@
       </button>
     </nav>
 
+    <!-- Cuadro de partidos jugados -->
+      <article class="info-bar mt-16" *ngIf="pageState.selectedGroupData">
+        <span class="info-icon">⚽</span>
+        <span>Partidos jugados en el grupo: <strong>{{ pageState.selectedGroupData.matchesPlayed }}</strong></span>
+      </article>
+
     <!-- Tabla del grupo seleccionado -->
     <ng-container *ngIf="pageState.selectedGroupData as group">
 
       <section class="table-wrap mt-16">
         <table>
-          <thead>
-            <tr>
-              <th style="width: 40px">Pos.</th>
-              <th>Equipo</th>
-              <th>Conf.</th>
-              <th style="width: 40px">PJ</th>
-              <th style="width: 40px">G</th>
-              <th style="width: 40px">E</th>
-              <th style="width: 40px">P</th>
-              <th style="width: 40px">GF</th>
-              <th style="width: 40px">GC</th>
-              <th style="width: 40px">DG</th>
-              <th style="width: 40px">Pts</th>
-              <th style="width: 50px">Clas.</th>
-            </tr>
-          </thead>
+            <thead>
+              <tr>
+                <th class="col-pos">Pos.</th>
+                <th class="col-equipo">Equipo</th>
+                <th class="col-conf">Conf.</th>
+                <th class="col-num">PJ</th>
+                <th class="col-num">G</th>
+                <th class="col-num">E</th>
+                <th class="col-num">P</th>
+                <th class="col-num">GF</th>
+                <th class="col-num">GC</th>
+                <th class="col-num">DG</th>
+                <th class="col-num">Pts</th>
+                <th class="col-clas">Clas.</th>
+              </tr>
+            </thead>
           <tbody>
             <tr
               *ngFor="let team of group.teams"
@@ -88,8 +95,13 @@
 
       <!-- Leyenda -->
       <div class="groups-legend mt-12">
-        <span class="groups-legend-main">✓ Verde: 1ro y 2do clasifican directo</span>
-        <span class="groups-legend-best-third">✓ Azul: mejor tercero</span>
+       <ul>
+          <li class="groups-legend-main">✓ Verde: 1ro y 2do clasifican directo
+         </li>
+          
+        <li class="groups-legend-best-third">✓ Azul: mejor tercero 
+         </li> 
+      </ul>
       </div>
 
     </ng-container>
