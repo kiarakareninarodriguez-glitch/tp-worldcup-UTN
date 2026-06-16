@@ -9,30 +9,16 @@ import { LiveEventsViewModel } from './model/live-events-view-model.interface';
 })
 export class LiveEventsPageComponent implements OnInit {
 
-  vm: LiveEventsViewModel = {
-    lang: 'es',
-    loading: true,
-    errorMessage: '',
-    showNoFinalState: false,
-    data: null
-  };
-
   constructor(private liveEventsService: LiveEventsService) {}
 
   ngOnInit(): void {
-    this.liveEventsService.getLiveEvents().subscribe({
-      next: (resp: any) => {
-        this.vm.data = resp?.data ?? null;
+    this.liveEventsService.initialize();
 
-        
-        this.vm.showNoFinalState = !this.vm.data;
+   
+  }
 
-        this.vm.loading = false;
-      },
-      error: () => {
-        this.vm.errorMessage = 'Error cargando eventos';
-        this.vm.loading = false;
-      }
-    });
+  
+  get vm():LiveEventsViewModel{
+    return this.liveEventsService.getViewModel();
   }
 }

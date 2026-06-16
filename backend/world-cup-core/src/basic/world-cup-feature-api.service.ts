@@ -21,40 +21,40 @@ export class WorldCupFeatureApiService extends AbstractBaseService {
   ) {
     super(adminService, worldCupApiService);
   }
-
+  
   public getCurrentTeamId(): string {
     return super.getCurrentTeamId();
   }
-
+  
   public getCurrentLang(): LanguageEnum {
     return super.getCurrentLang();
   }
-
+  
   public async getTeamPlayers(teamId: string, lang?: string): Promise<SquadPlayerApiItem[]> {
     return this.getEndpointData<SquadPlayerApiItem[]>(`/teams/${teamId}/players`, {
       lang: this.resolveLang(lang),
     });
   }
-
+  
   public async getGameDictionary(lang?: string): Promise<GameDictionaryApiResponse> {
     return this.getEndpointData<GameDictionaryApiResponse>('/reference/game-dictionary', {
       lang: this.resolveLang(lang),
     });
   }
-
+  
   public async getTeamHistory(teamId: string, lang?: string): Promise<TeamHistoryApiResponse> {
     return this.getEndpointData<TeamHistoryApiResponse>(`/teams/${teamId}/history`, {
       lang: this.resolveLang(lang),
     });
   }
-
+  
   public async listTeams(teamId?: string, name?: string): Promise<TeamCatalogApiItem[]> {
     return this.getEndpointData<TeamCatalogApiItem[]>('/teams', {
       teamId: teamId?.trim().toLowerCase(),
       name: name?.trim(),
     });
   }
-
+  
   public async getTeamStats(teamId: string, lang?: string): Promise<TeamStatsApiResponse> {
     return this.getEndpointData<TeamStatsApiResponse>(`/teams/${teamId}/stats`, {
       lang: this.resolveLang(lang),
@@ -66,12 +66,12 @@ export class WorldCupFeatureApiService extends AbstractBaseService {
       lang: this.resolveLang(lang),
     });
   }
-    public async getMatchCurrentSquad(lang?: string): Promise<MatchSquadResponse> {
+  public async getMatchCurrentSquad(lang?: string): Promise<MatchSquadResponse> {
     return this.getEndpointData<MatchSquadResponse>('/match/current/squad', {
       lang: this.resolveLang(lang),
     });
   }
-
+  
   public async simulateWorldCup(teamId: string, lang?: string): Promise<CurrentWorldCupApiResponse> {
     return this.postEndpointData<CurrentWorldCupApiResponse>('/world-cup/simulate', {
       teamId,
@@ -84,4 +84,12 @@ export class WorldCupFeatureApiService extends AbstractBaseService {
     { lang: this.resolveLang(lang) },
   );
 }
+
+public async getLiveEvents(resolvedLang: LanguageEnum): Promise<any> {
+    return this.postEndpointData<any>('/match/current/stats', {
+      lang: this.resolveLang(resolvedLang),
+    });
+  }
+
+
 }
