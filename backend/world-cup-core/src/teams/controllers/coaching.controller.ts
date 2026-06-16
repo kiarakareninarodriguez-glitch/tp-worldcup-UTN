@@ -1,20 +1,44 @@
-import { Controller, Get, HttpStatus, HttpCode } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { Controller, Get, HttpStatus, HttpCode, Query } from '@nestjs/common';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CoachingService } from '../services/coaching.service';
+import { AbstractController } from 'src/basic/abstract.controller';
+import { Body, Post } from '@nestjs/common';
+import { FinalChatBodySelectFormation } from 'src/match/controllers/request/final-chat-query.request';
+import { CoachingScreenResponse } from '../services/model/coaching-interface';
 
-@ApiTags('my-team') // Teoría de Configuración: Agrupa tu endpoint en la interfaz visual de Swagger
-@Controller('my-team') // Recurso base (Sustantivo de jerarquía superior según REST)
-export class CoachingController {
+@ApiTags('my-team') 
+@Controller('my-team') 
+export class CoachingController extends AbstractController {
   
-  // Inyección de dependencias: Recibimos el servicio que configuramos recién
-  constructor(private readonly coachingService: CoachingService) {}
+  constructor(private readonly coachingService: CoachingService) {
+    super();
+  }
 
-  // Contrato REST: Método HTTP GET para leer el recurso subordinado 'coaching'
-  // URL Final: http://localhost:4101/worldCupCore/my-team/coaching
-  @Get('coaching')
-  @HttpCode(HttpStatus.OK) // Código de Estado REST: Forzamos la respuesta estándar 200 OK
-  async getCoaching() {
-    // JavaScript Asincrónico: Esperamos la respuesta del servicio y la devolvemos
-    return await this.coachingService.getCoachInfo();
+  @Get('coach')
+  @ApiOperation({ summary: 'Obtiene la información general del cuerpo técnico, tácticas y compatibilidad' })
+  async getCoaching(
+    @Query('lang') lang: string = 'es' 
+  ) {
+    const coachData : CoachingScreenResponse = await this.coachingService.getCoachingOverview(lang);
+    return this.createOkResponse(coachData);
   }
 }
+  /*public async getStrategiesMatch(lang?: string): Promise<MatchStrategiesResponse[]> {
+      return this.getEndpointData<MatchStrategiesResponse[]>('/match/strategies', {
+        lang: this.resolveLang(lang),
+      });
+    }
+    
+  @Post('select-strategy')
+  @ApiOperation({ summary: 'Cuerpo técnico - Seleccionar estratégia' })
+  public async selectStrategy(@Body() body: CoachingController): Promise<unknown> {
+    return this.createOkResponse(await this.coachingService.selectStrategy(body.strategy,body.lang));
+  }
+  
+  @Post('select-formation')
+  @ApiOperation({ summary: 'Cuerpo técnico - seleccionar Formación' })
+  public async selectformation(@Body() body: FinalChatBodySelectFormation): Promise<unknown> {
+   return this.createOkResponse(await this.coachingService.selectformation(body.formation,body.lang));
+  }
+  
+}*/

@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { APP_ROUTES } from './core/constants/app-routes';
 import { SquadPageComponent } from './features/my-team/squad/squad.component';
-import { CoachingPageComponent } from './features/my-team/coaching/coaching.component';
+import { CoachingComponent } from './features/my-team/coaching/coaching.component';
 import { TeamHistoryPageComponent } from './features/my-team/team-history/team-history.component';
 import { RivalsPageComponent } from './features/my-team/rivals/rivals.component';
 import { GroupsPageComponent } from './features/world-cup/groups/groups.component';
@@ -27,7 +27,7 @@ const routes: Routes = [
   },
   {
     path: APP_ROUTES.myTeam.coaching,
-    component: CoachingPageComponent,
+    component: CoachingComponent,
     data: {
       titleKey: 'route.myTeam.coaching.title',
       subtitleKey: 'route.myTeam.coaching.subtitle',

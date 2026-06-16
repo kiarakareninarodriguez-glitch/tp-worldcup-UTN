@@ -11,11 +11,13 @@ import type {
   TeamCatalogApiItem,
   TeamStatsApiResponse,
 } from '../world-cup/services/model/simulation-service.interface';
+import { WorldCupByIdApiResponse, WorldCupStatsByIdApiResponse, WorldCupAwardsByIdApiResponse, WorldCupMatchCardsApiResponse } from 'src/world-cup/services/model/world-cup-history-service.interface';
 import { MatchStartFinalResponse, SelectStrategyResponse } from 'src/match/services/model/api/match-start-final-response.model';
 import { MatchCurrentSquadResponse } from 'src/match/services/model/api/match-current-quad-response.model';
 import { MatchStrategiesResponse } from 'src/match/services/model/api/match-strategies-response.mode';
 import { MatchformationsResponse, SelectFormationResponse } from 'src/match/services/model/api/match-formations-response.mode';
 import type { GroupApiItem } from '../world-cup/services/model/simulation-service.interface';
+import { CoachingApiResponse, CoachingScreenResponse, CoachStatApiResponse } from 'src/teams/services/model/coaching-interface';
 
 @Injectable()
 export class WorldCupFeatureApiService extends AbstractBaseService {
@@ -29,6 +31,19 @@ export class WorldCupFeatureApiService extends AbstractBaseService {
     adminService: AdminService,
   ) {
     super(adminService, worldCupApiService);
+  }
+
+  public async getCoach(teamId: string, lang?: string): Promise<CoachingApiResponse[]> {
+    return this.getEndpointData<CoachingApiResponse[]>(`/teams/coaches/`, {
+      teamId,
+    });
+  }
+
+  public async getStats(teamId: string, lang?: string): Promise <CoachStatApiResponse> {
+
+     return this.getEndpointData<CoachStatApiResponse>(`/teams/${teamId}/stats`, {
+      lang: this.resolveLang(lang),
+    });
   }
 
   public getCurrentTeamId(): string {
@@ -97,18 +112,29 @@ export class WorldCupFeatureApiService extends AbstractBaseService {
     { lang: this.resolveLang(lang) },
   );
 }
-  /**
-   * feature 10 jugar la final
-   * 
-    exist GET /world-cup/current - Para verificar si existe una final pendiente (canStartFinal,hasActiveFinal).
-    crear GET /match/strategies - Para poblar el selector de estrategia. Acepta ?lang=
-    crear GET /match/formations - Para poblar el selector de formación. Acepta ?lang=
-    crear POST /match/select-strategy - Para cambiar la estrategia durante el partido.
-    crear POST /match/start-final - Para iniciar la final. Body: { teamId: string }. Si ya hay un final activa, la retorna. El WorldCupCore pasa el teamId del .env (TEAM_ID).
-    crear POST /match/play - Para ejecutar un turno. Body: { matchId: string, input?: string,messageTypeId?: string }. Retorna mensajes y opciones del proximo turno.
-    crear POST /match/select-formation - Para cambiar la formación durante el partido
-   * 
-   */
+  public async getWorldCupHistory(): Promise<string[]> {
+    return this.getEndpointData<string[]>('/world-cup/history');
+  }
+
+  public async getWorldCupById(id: string): Promise <WorldCupByIdApiResponse>{
+    return this.getEndpointData<WorldCupByIdApiResponse>(`/world-cup/${id}`,{})
+  }
+
+  public async getWorldCupStatsById(id: string): Promise <WorldCupStatsByIdApiResponse>{
+    return this.getEndpointData<WorldCupStatsByIdApiResponse>(`/world-cup/${id}/stats`,{})
+  }
+
+  public async getWorldCupAwardsById(id: string, lang?: string): Promise <WorldCupAwardsByIdApiResponse>{
+    return this.getEndpointData<WorldCupAwardsByIdApiResponse>(`/world-cup/${id}/awards`,{
+      lang: this.resolveLang(lang),
+    })
+  }
+
+  public async getWorldCupMatchCardsById(id: string): Promise<WorldCupMatchCardsApiResponse[]> {
+  return this.getEndpointData<WorldCupMatchCardsApiResponse[]>(`/world-cup/${id}/matches`, {});
+}
+ 
+
   public async getStrategiesMatch(lang?: string): Promise<MatchStrategiesResponse[]> {
     return this.getEndpointData<MatchStrategiesResponse[]>('/match/strategies', {
       lang: this.resolveLang(lang),
