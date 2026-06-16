@@ -18,4 +18,15 @@ export class RivalsPageComponent implements OnInit {
   ngOnInit(): void {
     this.rivalsService.initialize();
   }
+  public getFlag(teamId: string): string {
+  const flags: Record<string, string> = {
+  mar: '🇲🇦', // Marruecos
+  civ: '🇨🇮', // Costa de Marfil
+  gha: '🇬🇭', // Ghana
+  egy: '🇪🇬', // Egipto
+  alg: '🇩🇿', // Argelia
+};
+
+  return flags[teamId] ?? '🏳️';
+}
 }
